@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function Home() {
   return (
-    <div>
-      Home
-    </div>
+    <main className='[grid-area:main]'>
+        Home
+    </main>
   )
 }
