@@ -12,8 +12,14 @@ export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
   return (
     <aside className='[grid-area:sidebar] bg-slate-100 text-gray-900  dark:bg-gray-900 dark:text-white rounded-md border-r border-gray-300 dark:border-gray-700 p-4'>
       <div className="mb-10 text-2xl font-bold max-[500px]:text-sm">Logo</div>
-      <button onClick={handleMenuBar} className="hidden max-[500px]:block"><FaBars /></button>
-      <div className={`space-y-2 ${getSideBarOpen ? 'max-[500px]:block' : 'max-[500px]:hidden'} `}>
+
+      {/* menu bar is hidden until width becomes lesser than 500px */}
+
+      <button onClick={handleMenuBar} className="hidden max-[500px]:block mb-10"><FaBars /></button>
+
+      {/* if click menubar getSideBarOpen value will be true, if true and if width is lesser than 500px then navigation button will be visible */}
+
+      <div className={`space-y-2 text-normal ${getSideBarOpen ? 'max-[500px]:block' : 'max-[500px]:hidden'} max-sm:text-md max-md:text-md`}>
         <NavButton buttonIcon={<FaThLarge/>} buttonName={'Dashboard'} />
         <NavButton buttonIcon={<FaUsers />} buttonName={'Users'} />
         <NavButton buttonIcon={<FaChartBar />} buttonName={'Analytics'} />
