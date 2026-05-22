@@ -3,12 +3,12 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 export default function UserTable() {
 
-  const tableStyle = 'w-full mx-auto border border-gray-200 bg-white text-black rounded-xl max-[380px]:rounded-lg max-[380px]:border-none overflow-hidden shadow-sm shadow-gray-500'
+  const tableStyle = 'w-full mx-auto bg-white text-black rounded-xl max-[380px]:rounded-lg max-[380px]:border-none overflow-hidden shadow-sm shadow-gray-500'
 
   return (
    <div className='p-4 max-[500px]:p-0 max-[500px]:mt-4 max-[380px]:overflow-x-scroll'>
     <table className={tableStyle}>
-      <thead className='bg-purple-500 text-white'>
+      <thead className='bg-purple-800 dark:bg-purple-600 text-white'>
       <tr>
           <th className='table-head-cell'>Name</th>
           <th className='table-head-cell'>Department</th>

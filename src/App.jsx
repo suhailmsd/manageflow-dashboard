@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import Router from "./lib/Router";
+import Router from "./Router/Router";
 import ThemeProvider from './Providers/ThemeProvider'
 
 export default function App() {

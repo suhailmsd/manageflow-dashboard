@@ -1,7 +1,11 @@
+import FormToggle from "../Components/LoginAndSignup/FormToggleCard";
 
 
 export default function Login() {
+
   return (
-    <div>Login</div>
+    <div>
+      <FormToggle />
+    </div>
   )
 }

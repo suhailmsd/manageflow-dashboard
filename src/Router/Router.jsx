@@ -7,11 +7,15 @@ import NoutFound from '../Pages/NoutFound'
 import Layout from '../Pages/Layout'
 import CreateUser from '../Pages/CreateUser'
 import UpdateUser from '../Pages/UpdateUser'
+import Header from '../Components/Header/Header'
 
-const router = createBrowserRouter([
+const router = createBrowserRouter([,
         {
             path:"",
-            element: <Login />
+            element:<Header />,
+            children:[
+                {index:true, element:<Login />}
+            ]
         },
         {
             path:"app/dashboard",

@@ -4,9 +4,9 @@
 
 
 .table-head-cell{
-    @apply text-left px-6 py-2 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[10px]
+    @apply text-left px-6 py-2 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[10px] max-xl:px-2
 }
 
 .table-body-cell{
-    @apply px-6 py-3 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[9px]
+    @apply px-6 py-3 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[9px] max-xl:px-2
 }

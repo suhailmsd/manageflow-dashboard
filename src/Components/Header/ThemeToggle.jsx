@@ -38,7 +38,10 @@ export default function ThemeToggle() {
         {/* <button onClick={themeChangeSet} className={`mr-2 h-8 w-16 bg-gray-500 rounded-full p-1 ${theme ? 'bg-blue-600' : 'bg-gray-500'}`}>
             <div className={`h-6 w-6 bg-slate-200 rounded-full transition duration-200 ${theme ? 'translate-x-8' : 'translate-x-0'}`}></div></button>       */}
 
-            <button onClick={themeChangeSet} className="text-2xl">{theme ? <FaMoon color="blue" /> : <FaSun color="orange" />}</button>
+            <div className="toggle-button-group relative group">
+              <button onClick={themeChangeSet} className="text-2xl">{theme ? <FaMoon color="blue" /> : <FaSun color="orange" />}</button>
+              <div className="hidden group-hover:block absolute bottom-4 left-4 w-28 rounded text-center bg-gray-900 text-white"><span className="text-xs">Toggle dark/light</span></div>
+            </div>
     </>
   )
 }
