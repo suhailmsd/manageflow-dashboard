@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { createBrowserRouter, useNavigate } from 'react-router-dom'
-import Home from '../Components/Home/Home'
-import Users from '../Pages/Users'
+
+import Home from '../Pages/Home'
 import Login from '../Pages/Login'
-import NoutFound from '../Pages/NoutFound'
-import Layout from '../Pages/Layout'
-import CreateUser from '../Pages/CreateUser'
-import UpdateUser from '../Pages/UpdateUser'
+import NoutFound from '../Pages/NotFound'
+import Profile from '../Pages/Profile'
+import Layout from '../Layout/Layout'
 import Header from '../Components/Header/Header'
 
 const router = createBrowserRouter([,
@@ -22,9 +21,7 @@ const router = createBrowserRouter([,
             element:<Layout />,
             children:[
                 {index:true, element:<Home />},
-                {path:"users",element: <Users />},
-                {path:"users/create", element: <CreateUser />},
-                {path:"users/update", element: <UpdateUser />},
+                {index:true, element:<Profile />},
             ]
         },
          {

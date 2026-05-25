@@ -17,17 +17,21 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         email:'',
         password:'',
         confirmPassword:'',
+        username:'',
+        department:''
+
     })
 
     const[errors,setErrors] = useState({
         email:'',
         password:'',
         confirmPassword:'',
+        username:'',
     })
 
-    const {isEmailInvalid, isPasswordInvalid, isConfirmPasswordInvalid} = UiValidation(form,mode)
+    const {isEmailInvalid, isPasswordInvalid, isConfirmPasswordInvalid, isUsernameInvalid} = UiValidation(form,mode)
 
-    const disableButton = !form.email || !form.password || isEmailInvalid || isPasswordInvalid || (mode==='register' && (!form.confirmPassword || isConfirmPasswordInvalid))
+    const disableButton = !form.email || !form.password || isEmailInvalid || isPasswordInvalid || (mode==='register' && (!form.confirmPassword || isConfirmPasswordInvalid || !form.username || isUsernameInvalid || !form.department))
 
  
     function handleInputChange(event){
@@ -35,7 +39,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         setForm(prev => ({
             ...prev,
             [name]:value
-        }))
+        }))        
 
         if(value.trim() !== ""){
             setErrors((prev) => ({
@@ -59,22 +63,12 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     function userLoginRequest(event){
         event.preventDefault()
         console.log('loginnnn');
-        setForm({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
         
     }
 
     function userSignupRequest(event){    
         event.preventDefault()
         console.log('regisssssss');
-        setForm({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
         
     }
 
@@ -84,11 +78,14 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     email: '',
     password: '',
     confirmPassword: '',
+    username:'',
   });
 
   setForm(prev => ({
     ...prev,
     confirmPassword: '',
+    username:'',
+    department:''
   }));
 }, [mode]);
 
@@ -115,6 +112,23 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                     <input type="password" id="confirmPassword"  placeholder="******"  className={`${inputStyle} ${errors.confirmPassword ? 'border-red-500 border-2' : ''}`} value={form.confirmPassword} onChange={handleInputChange} name='confirmPassword' onBlur={handleBlur}/>
                     {isConfirmPasswordInvalid && <div className='text-xs text-red-500 mt-1'>Password do not match</div> }
                     {errors.confirmPassword && <div className='text-xs text-red-500 mt-1'>{errors.confirmPassword}</div>}
+                </div>}
+               {mode === 'register' &&  <div className="input-group flex text-left w-full gap-2">
+                     <div className='w-full'>
+                        <label htmlFor="">Username</label>
+                        <input type="text" placeholder='Cena123' className={`${inputStyle} ${errors.username ? 'border-red-500 border-2' : ''}`} name='username' value={form.username} onChange={handleInputChange} onBlur={handleBlur}/>
+                        {isUsernameInvalid && <div className='text-xs text-red-500 mt-1'>Only letters and numbers allowed</div> }
+                        {errors.username && <div className='text-xs text-red-500 mt-1'>{errors.username}</div>}
+                    </div>
+                    <div className='w-full'>
+                        <label htmlFor="">Department</label>
+                        <select id="" className={inputStyle} name="department" onChange={handleInputChange}>
+                            <option selected disabled>Select an option</option>
+                            <option  value="IT" >IT</option>
+                            <option value="HR">HR</option>
+                        </select>
+                        {form.department === '' && <div className='text-xs text-red-500 mt-1'>Department needed</div> }
+                    </div>
                 </div>}
                 <button disabled={disableButton} className={`bg-blue-500 w-full py-3 rounded-lg hover:bg-blue-600 shadow-sm hover:shadow text-white font-semibold transition-all duration-200 ${disableButton ? 'opacity-50 cursor-not-allowed' : ''}`}>{buttonTitle}</button>
 
