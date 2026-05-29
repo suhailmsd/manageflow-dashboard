@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { ThemeContext } from "../../Contexts/ThemeContext"
+import { ThemeContext } from "../../Contexts"
 import { FaMoon, FaSun } from "react-icons/fa";
 
 

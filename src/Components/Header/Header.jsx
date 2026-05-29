@@ -1,10 +1,28 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts";
+import { getAuth, signOut } from "firebase/auth";
 
 
 export default function Header() {
 
+  const auth = getAuth()
+  const navigate = useNavigate();
 
+  let {userDetails,setUserDetails} = useContext(UserContext);
+
+  async function userLogoutClick(){
+    console.log('hello');
+    try{
+      await signOut(auth)
+      console.log('Signout Successfully');
+      setUserDetails(null)
+      navigate('/')
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   return (
    <div>
@@ -21,6 +39,8 @@ export default function Header() {
             <p className="text-xs text-gray-500 dark:text-gray-300">Admin</p>
           </div>
         </div>
+
+        {userDetails && <button onClick={userLogoutClick} className="bg-red-600 py-1 px-3 rounded-lg text-white text-md hover:bg-red-700">Logout</button>}
 
       </div>
     </header>

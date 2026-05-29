@@ -1,9 +1,16 @@
 
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import UiValidation from './UiValidation';
 import {FaEyeSlash, FaEye} from "react-icons/fa";
+import useLoginRequest from './LoginRequest';
+import { UserContext } from '../../Contexts';
+import { useNavigate } from 'react-router-dom';
 
 export default function FormRegisterAndLogin({buttonTitle,mode}) {
+
+    const {setUserDetails} = useContext(UserContext)
+
+    const navigate = useNavigate()
 
     let inputStyle = 'p-2 rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full'
 
@@ -12,6 +19,8 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     function togglePasswordVisible(){
         setShowPassword(!showPassword)
     }
+
+    const {loginData,loginError,setLoginError,isLoginLoading,login} = useLoginRequest()
 
     const[form,setForm] = useState({
         email:'',
@@ -47,6 +56,8 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                 [name]:""
             }))
         }
+        setLoginError(null)
+
     } 
 
 
@@ -60,13 +71,21 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         }
     }
 
-    function userLoginRequest(event){
-        event.preventDefault()
-        console.log('loginnnn');
+
+    function loginSubmitRequest(event){
+        event.preventDefault();
+        login(form);
         
     }
 
-    function userSignupRequest(event){    
+     useEffect(() => {
+        if (loginData) {
+            setUserDetails(loginData)
+            navigate('app/dashboard')
+        }
+    }, [loginData]);
+
+    function signupSubmitRequest(event){    
         event.preventDefault()
         console.log('regisssssss');
         
@@ -91,7 +110,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
 
   return (
             <div className="w-full max-w-md p-4 text-center sm:w-full">
-            <form action="" className="space-y-6 py-4 px-2 max-sm:px-0 max-[300px]:space-y-3" onSubmit={mode !== 'register' ? userLoginRequest : userSignupRequest}>
+            <form action="" className="relative space-y-6 py-4 px-2 max-sm:px-0 max-[300px]:space-y-3" onSubmit={mode !== 'register' ? loginSubmitRequest : signupSubmitRequest}>
                 <div className="input-group flex flex-col text-left w-full">
                     <label htmlFor="email" className="mb-1 text-gray-600">Email</label>
                     <input type="text" id="email" placeholder="name@example.com" className={`${inputStyle} ${errors.email ? 'border-red-500 border-2' : ''}`} value={form.email} onChange={handleInputChange} name='email' onBlur={handleBlur}/>
@@ -106,6 +125,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                     </div>
                     {isPasswordInvalid&& <div className='text-xs text-red-500 block mt-1'>Minimum 8-20 char with atleast a capital letter, special char, number</div>}
                     {errors.password && <div className='text-xs text-red-500 mt-1'>{errors.password}</div>}
+                    {mode==='login' && loginError &&  <div className='bg-transparent w-full py-3 rounded-lg shadow-sm font-semibold text-center text-red-500 border border-red-900 mt-5'>{loginError}</div>}
                 </div>
                 {mode === 'register' && <div className="input-group flex flex-col text-left w-full">
                     <label htmlFor="confirmPassword" className="mb-1 text-gray-600"> Confirm Password</label>
@@ -117,7 +137,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                      <div className='w-full'>
                         <label htmlFor="">Username</label>
                         <input type="text" placeholder='Cena123' className={`${inputStyle} ${errors.username ? 'border-red-500 border-2' : ''}`} name='username' value={form.username} onChange={handleInputChange} onBlur={handleBlur}/>
-                        {isUsernameInvalid && <div className='text-xs text-red-500 mt-1'>Only letters and numbers allowed</div> }
+                        {isUsernameInvalid && <div className='text-xs text-red-500 mt-1'>Only letters and numbers allowed with max 15 chars</div> }
                         {errors.username && <div className='text-xs text-red-500 mt-1'>{errors.username}</div>}
                     </div>
                     <div className='w-full'>
@@ -131,7 +151,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                     </div>
                 </div>}
                 <button disabled={disableButton} className={`bg-blue-500 w-full py-3 rounded-lg hover:bg-blue-600 shadow-sm hover:shadow text-white font-semibold transition-all duration-200 ${disableButton ? 'opacity-50 cursor-not-allowed' : ''}`}>{buttonTitle}</button>
-
+                {mode==='login' && isLoginLoading && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
             </form>
         </div>
   )
