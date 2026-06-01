@@ -5,10 +5,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, Firestore, getDocs, getFirestore } from "firebase/firestore";
 
 export default function useLoginRequest(){
-
-    const {firebase} = useContext(FirebaseContext)
     const auth = getAuth();
-    const fireStoreDB = getFirestore(firebase)
 
 
     const [loginError,setLoginError] = useState(null)
@@ -30,8 +27,6 @@ export default function useLoginRequest(){
             try{
                 setLoginError(null)
                 setIsLoginLoading(true)
-                
-                console.log(form);
 
                 let userCredential = await signInWithEmailAndPassword(
                     auth,
@@ -41,27 +36,9 @@ export default function useLoginRequest(){
                 
                 console.log('Logged in as:',userCredential.user.email,'=>', userCredential.user.uid);
 
-                try {
-            const querySnapshot = await getDocs(
-                collection(fireStoreDB, "Users")
-            );
-
-            const users = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-
-        let isUserIdMatchesFirestore = users.find(item => item.userId == userCredential.user.uid)
-
-        if(isUserIdMatchesFirestore){
-            let userData = [{...isUserIdMatchesFirestore,email:userCredential.user.email}]
-            setLoginData(userData);
-        }
-
-            } catch (error) {
-            console.error('no dbbb exisit');
-            }
-
+                if(userCredential){
+                    setLoginData(userCredential.user)
+                }
                 
 
             }catch(error){

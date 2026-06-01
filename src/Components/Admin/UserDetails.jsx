@@ -25,8 +25,6 @@ export default function UserDetails() {
         </div>
 
         </div>
-
-          <UserTable />
         
     </main>
   )

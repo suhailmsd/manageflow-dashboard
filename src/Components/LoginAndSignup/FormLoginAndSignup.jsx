@@ -3,12 +3,13 @@ import {useContext, useEffect, useState} from 'react'
 import UiValidation from './UiValidation';
 import {FaEyeSlash, FaEye} from "react-icons/fa";
 import useLoginRequest from './LoginRequest';
+import useSignupRequest from './SignupRequest';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Contexts';
-import { useNavigate } from 'react-router-dom';
 
 export default function FormRegisterAndLogin({buttonTitle,mode}) {
 
-    const {setUserDetails} = useContext(UserContext)
+    const {userDetails} = useContext(UserContext)
 
     const navigate = useNavigate()
 
@@ -21,6 +22,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     }
 
     const {loginData,loginError,setLoginError,isLoginLoading,login} = useLoginRequest()
+    const {signupSucessMessage,loadingSignupRequest,signupError,signup,setSignupSucessMessage,setSignupError} = useSignupRequest()
 
     const[form,setForm] = useState({
         email:'',
@@ -57,6 +59,8 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
             }))
         }
         setLoginError(null)
+        setSignupSucessMessage(null)
+        setSignupError(null)
 
     } 
 
@@ -78,17 +82,27 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         
     }
 
-     useEffect(() => {
-        if (loginData) {
-            setUserDetails(loginData)
-            navigate('app/dashboard')
+    useEffect(()=>{
+        if(userDetails?.role === "employee"){
+            navigate("/app/dashboard")
         }
-    }, [loginData]);
+        if(userDetails?.role === "admin"){
+            navigate("/app/dashboard/admin")
+        }
+
+    },[userDetails])
+
+    useEffect(()=>{
+        if(signupSucessMessage){
+            console.log(signupSucessMessage,'thisssss');
+        }
+        
+      
+    },[signupSucessMessage])
 
     function signupSubmitRequest(event){    
         event.preventDefault()
-        console.log('regisssssss');
-        
+        signup(form)
     }
 
 
@@ -99,6 +113,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     confirmPassword: '',
     username:'',
   });
+  setSignupError(null)
 
   setForm(prev => ({
     ...prev,
@@ -142,16 +157,18 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                     </div>
                     <div className='w-full'>
                         <label htmlFor="">Department</label>
-                        <select id="" className={inputStyle} name="department" onChange={handleInputChange}>
+                        <select id="" className={`${inputStyle} bg-white`} name="department" onChange={handleInputChange}>
                             <option selected disabled>Select an option</option>
-                            <option  value="IT" >IT</option>
-                            <option value="HR">HR</option>
+                            <option  value="IT" className='bg-slate-200'>IT</option>
+                            <option value="HR" className='bg-slate-200'>HR</option>
                         </select>
                         {form.department === '' && <div className='text-xs text-red-500 mt-1'>Department needed</div> }
                     </div>
                 </div>}
+                {mode === "register" && <div className='text-left text-red-600 text-sm'>{signupSucessMessage || signupError}</div>}
                 <button disabled={disableButton} className={`bg-blue-500 w-full py-3 rounded-lg hover:bg-blue-600 shadow-sm hover:shadow text-white font-semibold transition-all duration-200 ${disableButton ? 'opacity-50 cursor-not-allowed' : ''}`}>{buttonTitle}</button>
                 {mode==='login' && isLoginLoading && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
+                {mode==='register' && loadingSignupRequest && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
             </form>
         </div>
   )

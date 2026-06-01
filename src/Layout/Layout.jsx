@@ -2,7 +2,8 @@ import { Outlet } from 'react-router-dom'
 import Header from '../Components/Header/Header'
 import SideBar from '../Components/Sidebar/SideBar'
 import useTheme from '../Hooks/useTheme';
-import {useState } from 'react';
+import {useContext, useState } from 'react';
+import { UserContext } from '../Contexts';
 
 export default function Layout() {
 
