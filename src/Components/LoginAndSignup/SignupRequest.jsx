@@ -1,18 +1,20 @@
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useContext, useEffect, useState } from "react";
-import { FirebaseContext, UserContext } from "../../Contexts";
+import { FirebaseContext, ToastContext, UserContext } from "../../Contexts";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useToast } from "../../Hooks";
 
 
-export default function useSignupRequest(){
+export default function UseSignupRequest(){
+
 
     const {setIsSignupState} = useContext(UserContext)
+    const {handleToast,setToastType,setToastMessage} = useToast();
 
     const {firebase} = useContext(FirebaseContext)
     const auth = getAuth();
     const fireStoreDB = getFirestore(firebase);
-    const navigate = useNavigate();
     
     
     const [signupSucessMessage,setSignupSucessMessage] = useState(null);
@@ -31,6 +33,7 @@ export default function useSignupRequest(){
             setSignupSucessMessage(null)
             
             const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+            handleToast("success","User Registered successfully...")
             
             const tofireStoreUserCollection = {...filterForm, userId:userCredential.user.uid, status:"pending",role:"employee",joinedAt: new Date().toISOString()};
 
@@ -41,14 +44,15 @@ export default function useSignupRequest(){
             await signOut(auth)
 
             setIsSignupState(false);
-            
-            setSignupSucessMessage('User registered successfully');
+            setSignupSucessMessage('User register successful');
 
             window.location.href = "/"
 
         }catch(error){
             if(error.message === "Firebase: Error (auth/email-already-in-use)."){
-                return setSignupError('Email already exists')
+                setSignupError('Email already exists')
+                handleToast("failure","Auth Error: invalid Email")
+                return
             }
             setSignupError(error.message)
         }finally{

@@ -1,12 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import UiValidation from "./UiValidation";
-import {FirebaseContext} from '../../Contexts/index'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, Firestore, getDocs, getFirestore } from "firebase/firestore";
 
-export default function useLoginRequest(){
+export default function UseLoginRequest(){
     const auth = getAuth();
-
 
     const [loginError,setLoginError] = useState(null)
     const [loginData,setLoginData] = useState(null)

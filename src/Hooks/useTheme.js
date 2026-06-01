@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react"
 import { ThemeContext } from "../Contexts"
+import { useToast } from "."
 
 export default function useTheme(){
     const {theme} = useContext(ThemeContext)

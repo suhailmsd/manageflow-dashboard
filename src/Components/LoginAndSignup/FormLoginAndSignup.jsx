@@ -2,14 +2,16 @@
 import {useContext, useEffect, useState} from 'react'
 import UiValidation from './UiValidation';
 import {FaEyeSlash, FaEye} from "react-icons/fa";
-import useLoginRequest from './LoginRequest';
-import useSignupRequest from './SignupRequest';
-import { Navigate, useNavigate } from 'react-router-dom';
+import UseLoginRequest from './LoginRequest';
+import UseSignupRequest from './SignupRequest';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Contexts';
+import { useToast } from '../../Hooks';
 
 export default function FormRegisterAndLogin({buttonTitle,mode}) {
 
     const {userDetails} = useContext(UserContext)
+    const {setToastType,setToastMessage} = useToast();
 
     const navigate = useNavigate()
 
@@ -21,8 +23,8 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         setShowPassword(!showPassword)
     }
 
-    const {loginData,loginError,setLoginError,isLoginLoading,login} = useLoginRequest()
-    const {signupSucessMessage,loadingSignupRequest,signupError,signup,setSignupSucessMessage,setSignupError} = useSignupRequest()
+    const {loginData,loginError,setLoginError,isLoginLoading,login} = UseLoginRequest()
+    const {signupSucessMessage,loadingSignupRequest,signupError,signup,setSignupSucessMessage,setSignupError} = UseSignupRequest()
 
     const[form,setForm] = useState({
         email:'',
@@ -79,7 +81,6 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     function loginSubmitRequest(event){
         event.preventDefault();
         login(form);
-        
     }
 
     useEffect(()=>{
@@ -91,14 +92,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
         }
 
     },[userDetails])
-
-    useEffect(()=>{
-        if(signupSucessMessage){
-            console.log(signupSucessMessage,'thisssss');
-        }
-        
-      
-    },[signupSucessMessage])
+    
 
     function signupSubmitRequest(event){    
         event.preventDefault()
@@ -122,6 +116,7 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
     department:''
   }));
 }, [mode]);
+
 
   return (
             <div className="w-full max-w-md p-4 text-center sm:w-full">
@@ -165,7 +160,6 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                         {form.department === '' && <div className='text-xs text-red-500 mt-1'>Department needed</div> }
                     </div>
                 </div>}
-                {mode === "register" && <div className='text-left text-red-600 text-sm'>{signupSucessMessage || signupError}</div>}
                 <button disabled={disableButton} className={`bg-blue-500 w-full py-3 rounded-lg hover:bg-blue-600 shadow-sm hover:shadow text-white font-semibold transition-all duration-200 ${disableButton ? 'opacity-50 cursor-not-allowed' : ''}`}>{buttonTitle}</button>
                 {mode==='login' && isLoginLoading && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
                 {mode==='register' && loadingSignupRequest && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
