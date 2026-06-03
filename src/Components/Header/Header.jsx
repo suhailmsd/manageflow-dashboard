@@ -1,13 +1,18 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Contexts";
 import { getAuth, signOut } from "firebase/auth";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
-import { FaHouseMedical } from "react-icons/fa6";
+import useModal from "../../Hooks/useModal";
+import ModalBox from "../Modal/ModalBox";
+import LoadingSpinner from "../Loading/LoadingSpinner";
 
 
 export default function Header() {
+
+  const {modalTitle,openModal,closeModal,isModalOpen} = useModal();
+  const [loadingSpinner,setLoadingSpinner] = useState(false)
 
   const auth = getAuth()
   const navigate = useNavigate();
@@ -15,26 +20,31 @@ export default function Header() {
 
   let {userDetails,userLoading} = useContext(UserContext);
 
-  async function userLogoutClick(){
-    console.log('hello');
+  function userLogoutClick(){
+    openModal('Are you sure want to Logout?')  
+  }
+
+  async function confirmLogout(){
+    setLoadingSpinner(true);
     try{
+      await new Promise((resolve) => setTimeout(resolve,2000))
       await signOut(auth)
-      console.log('Signout Successfully');
       navigate('/')
     }catch(error){
       console.log(error);
+    }finally{
+      setLoadingSpinner(false)
     }
   }
-
-
 
   return (
    <div>
      <header className="[grid-area:header] h-16 flex items-center justify-end px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-4">
 
-        {userDetails && location.pathname !== ("/app/dashboard" && "/app/dashboard/admin") && <Link to={`${userDetails.role === 'employee'? '/app/dashboard' : '/app/dashboard/admin'}`}><button className="text-black dark:text-white text-md  px-1 border-b border-gray-400 hover:border-gray-300 ">{<FaHome size='2em' />}</button></Link>}
+        {userDetails && location.pathname !== ("/app/dashboard" && "/app/dashboard/admin") && <Link to={`${userDetails.role === 'employee'? '/app/dashboard' : '/app/dashboard/admin'}`}><button className="text-black dark:text-white text-md  px-1 border-b border-gray-400 hover:border-gray-300">{<FaHome size='2em' className="hover:translate-y-1"  />}</button></Link>}
         <ThemeToggle />
+        {isModalOpen && <ModalBox modalTitle={modalTitle} cancelModal={closeModal} confirmModal={confirmLogout} confirmButtonTitle={'Logout'} /> }
 
        {userDetails && 
         <Link to={`${userDetails.role === 'employee'? '/app/dashboard/profile' : '/app/dashboard/admin/profile'}`}>
@@ -50,8 +60,11 @@ export default function Header() {
         </Link>
         }
 
-        {userDetails && <button onClick={userLogoutClick} className="bg-red-600 py-1 px-3 rounded-lg text-white text-md hover:bg-red-700">{<FaSignOutAlt />}</button>}
+        {userDetails && !isModalOpen && <button onClick={userLogoutClick} className="bg-red-600 py-1 px-3 rounded-lg text-white text-md hover:bg-red-700">{<FaSignOutAlt />}</button> }
 
+      </div>
+      <div className="fixed z-index 20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      {loadingSpinner && <LoadingSpinner /> }
       </div>
     </header>
 
