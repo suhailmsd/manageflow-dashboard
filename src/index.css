@@ -10,3 +10,26 @@
 .table-body-cell{
     @apply px-6 py-3 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[9px] max-xl:px-2
 }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+
+ /* Light mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #e2e8f0 inset !important; /* slate-200 */
+  -webkit-text-fill-color: #000 !important;
+}
+
+/* Dark mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0f172a inset !important; /* slate-900 */
+  -webkit-text-fill-color: #fff !important;
+}

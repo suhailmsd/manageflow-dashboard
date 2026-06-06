@@ -5,7 +5,6 @@ export default function useModal(){
     const [modalTitle,setModalTitle] = useState('');
 
     function openModal(getModalTitle){
-        console.log(getModalTitle,'modall');
         
         setIsModalOpen(true)
         setModalTitle(getModalTitle)
@@ -13,7 +12,6 @@ export default function useModal(){
 
     function closeModal(){
         setIsModalOpen(prev => !prev)
-        console.log('cancel modal clicked');
         
     }
 

@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Contexts";
@@ -42,7 +42,7 @@ export default function Header() {
      <header className="[grid-area:header] h-16 flex items-center justify-end px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-4">
 
-        {userDetails && location.pathname !== ("/app/dashboard" && "/app/dashboard/admin") && <Link to={`${userDetails.role === 'employee'? '/app/dashboard' : '/app/dashboard/admin'}`}><button className="text-black dark:text-white text-md  px-1 border-b border-gray-400 hover:border-gray-300">{<FaHome size='2em' className="hover:translate-y-1"  />}</button></Link>}
+        {userDetails && location.pathname !== ("/app/dashboard" && "/app/dashboard/admin") && <NavLink to={`${userDetails.role === 'employee'? '/app/dashboard' : '/app/dashboard/admin'}`} end>{({isActive}) => (<button className="text-black dark:text-white text-md  px-1 border-b border-gray-400 hover:border-gray-300">{<FaHome size='2em' className={isActive ? 'translate-y-1' : ''} />}</button>)}</NavLink>}
         <ThemeToggle />
         {isModalOpen && <ModalBox modalTitle={modalTitle} cancelModal={closeModal} confirmModal={confirmLogout} confirmButtonTitle={'Logout'} /> }
 
@@ -55,12 +55,12 @@ export default function Header() {
             <p className="font-medium text-sm dark:text-white">{userDetails?.username}</p>
             <p className="text-xs text-gray-500 dark:text-gray-300">{userDetails?.role}</p>
           </div>
-         <div className="hidden group-hover:block absolute top-0 right-0 px-2 rounded text-center bg-gray-900 text-white"><span className="text-xs">profile</span></div> 
+        
         </div>
         </Link>
         }
 
-        {userDetails && !isModalOpen && <button onClick={userLogoutClick} className="bg-red-600 py-1 px-3 rounded-lg text-white text-md hover:bg-red-700">{<FaSignOutAlt />}</button> }
+        {userDetails && !isModalOpen && <button onClick={userLogoutClick} className="bg-red-600 hover:bg-red-500 py-1 px-3 rounded-lg text-white text-md">{<FaSignOutAlt />}</button> }
 
       </div>
       <div className="fixed z-index 20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">

@@ -22,7 +22,6 @@ export default function UserProvider({children}){
     if(isSignupStateRef.current) return;
 
     if (LoggedInuser) {
-      console.log(LoggedInuser);
 
       const userSearchQuery = query(
         collection(firestoreDB, "Users"),

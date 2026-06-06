@@ -35,7 +35,7 @@ export default function UseSignupRequest(){
             const userCredential = await createUserWithEmailAndPassword(auth,email,password);
             handleToast("success","User Registered successfully...")
             
-            const tofireStoreUserCollection = {...filterForm, userId:userCredential.user.uid, status:"pending",role:"employee",joinedAt: new Date().toISOString()};
+            const tofireStoreUserCollection = {...filterForm, userId:userCredential.user.uid, status:"pending",role:"employee",firstName:"",lastName:"",phone:"",profileUrl:"",joinedAt: new Date().toISOString()};
 
             const collectionRef = collection(fireStoreDB,"Users");
 

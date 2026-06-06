@@ -7,7 +7,7 @@ import Login from '../Pages/Login'
 import NoutFound from '../Pages/NotFound'
 import Layout from '../Layout/Layout'
 import Header from '../Components/Header/Header'
-import UserProfile from '../Pages/Profile/UserProfile'
+import EmployeeProfile from '../Pages/Profile/EmployeeProfile'
 import AdminProfile from '../Pages/Profile/AdminProfile'
 import EmployeeDetails from '../Pages/AdminAction/EmployeeDetails'
 import AdminProtectedRoute from './AdminProtectedRoute'
@@ -29,7 +29,7 @@ const router = createBrowserRouter([,
                     element:<EmployeeProtectedRoute />,
                     children:[
                         {index:true,element:<UserHome />},
-                        {path:"profile",element:<UserProfile />}
+                        {path:"profile",element:<EmployeeProfile />}
                     ]
             },
                 
