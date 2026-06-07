@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Pagination from './Pagination';
+import useEditModal from './TableEditModal/useEditModal'
+import EditUserModal from './TableEditModal/EditUserModal';
 
 export default function UserTable() {
 
 
    const [currentUserPage,setCurrentUserPage] = useState(0);
+
+   const {openModal,closeModal,isOpenModal} = useEditModal();
 
   const users = Array.from({ length: 100 }, (_, i) => ({
   username: `user${i + 1}`,
@@ -21,6 +25,10 @@ let lastIndex = startIndex + usersPerPage
 
 
 let currentUsers = users.slice(startIndex,lastIndex);
+
+function EditUser(){
+  openModal()
+}
   
 
 
@@ -52,7 +60,7 @@ let currentUsers = users.slice(startIndex,lastIndex);
 
           <td className= 'table-body-cell'>
             <div className='flex justify-center gap-4'>
-              <button title="Edit" className='text-blue-600 hover:text-blue-900 transition'>
+              <button onClick={EditUser}  title="Edit" className='text-blue-600 hover:text-blue-900 transition'>
         <FaEdit size="1.2em" />
       </button>
       <button title="Delete" className='text-red-500 hover:text-red-700 transition'>
@@ -67,6 +75,7 @@ let currentUsers = users.slice(startIndex,lastIndex);
     </table>
 
     <Pagination totalUsers={users.length} usersPerPage={usersPerPage} setCurrentUserPage={setCurrentUserPage} currentUserPage={currentUserPage} />
+    {isOpenModal && <EditUserModal closeModal={closeModal}/>}
    </div>
   )
 }

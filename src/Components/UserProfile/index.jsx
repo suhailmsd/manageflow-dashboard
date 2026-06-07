@@ -93,7 +93,6 @@ export default function UserProfile() {
     
     event.preventDefault();
     if(hasChangesInForm && isFormFilledWithoutError){
-      console.log(hasChangesInForm,isFormFilledWithoutError);
       update({firstName:updateProfileForm.firstName.trim(),
         lastName:updateProfileForm.lastName.trim(),
         phone:updateProfileForm.phone})

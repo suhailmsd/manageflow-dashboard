@@ -15,7 +15,8 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
 
     const navigate = useNavigate()
 
-    let inputStyle = 'p-2 rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full'
+    // let inputStyle = 'p-2 rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full'
+    let inputStyle = 'p-2 rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full dark:bg-slate-900 dark:text-white bg-slate-200 text-black'
 
     const [showPassword,setShowPassword] = useState(false);
 
