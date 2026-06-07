@@ -1,11 +1,11 @@
 import React from 'react'
-import Dashboard from '../../Components/Dashboard/Dashboard'
+import AdminDashboard from '../../Components/Dashboard/AdminDashboard'
 
 export default function Home(
 ) {
   return (
     <div>
-      <Dashboard />
+      <AdminDashboard />
     </div>
   )
 }

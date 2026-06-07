@@ -115,7 +115,7 @@ export default function UserProfile() {
 
 
 
-  let inputStyle = 'p-2 max-[500px]:p-1 dark:bg-slate-900 dark:text-white bg-slate-200 text-black rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 dark:border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full'
+  let inputStyle = 'profile-input p-2 max-[500px]:p-1 dark:bg-slate-900 dark:text-white bg-slate-200 text-black rounded-md font-sans outline-none focus:ring-2 focus:ring-indigo-300 border border-gray-500 dark:border-gray-500 hover:ring-2 hover:ring-cyan-200 w-full'
 
   return (
   <div className="flex justify-center min-h-screen p-2 sm:p-4">

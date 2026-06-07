@@ -11,11 +11,11 @@ export default function ModalBox({modalTitle,cancelModal,confirmModal,confirmBut
         <div className='w-full flex flex-col items-center h-44 justify-between p-3 rounded-lg shadow relative bg-gray-700 opacity-90 dark:bg-gray-600'>
             <div className='mt-5'>
                 <h2 className='text-lg font-bold text-white text-center '>{modalTitle}</h2>
-                <button onClick={cancelModal} className='absolute top-2 right-2'><FaTimesCircle className='text-red-500 hover:text-red-600 dark:text-red-600 dark:hover:text-red-700' size={26} /></button>
+                <button onClick={cancelModal} className='absolute top-2 right-2'><FaTimesCircle className='text-red-600 hover:text-red-500 dark:text-red-600 dark:hover:text-red-700' size={26} /></button>
             </div>
             <div className='mb-2 w-full flex gap-2'>
-                <button onClick={confirmModal} className='bg-slate-50 hover:bg-slate-200 shadow py-2 rounded w-full text-gray-800 font-bold'>{confirmButtonTitle}</button>
-                <button onClick={cancelModal} className='bg-red-500 hover:bg-red-600 shadow py-2 rounded w-full text-white font-bold'>Cancel</button>
+                <button onClick={confirmModal} className='bg-slate-100 hover:bg-white shadow py-2 rounded w-full text-gray-800 font-bold'>{confirmButtonTitle}</button>
+                <button onClick={cancelModal} className='bg-red-600 hover:bg-red-500 shadow py-2 rounded w-full text-white font-bold'>Cancel</button>
             </div>
         </div>
     </div>

@@ -1,10 +1,10 @@
 import React from 'react'
-import UserDetails from '../../Admin/UserDetails'
+import AdminDashboardDetails from '../../Admin/AdminDashboardDetails'
 
 export default function AdminDashboard() {
   return (
     <div>
-      <UserDetails />
+      <AdminDashboardDetails />
     </div>
   )
 }

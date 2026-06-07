@@ -1,6 +1,7 @@
 import {FaThLarge,FaUsers,FaChartBar, FaBars} from "react-icons/fa";
 import NavButton from "./NavButton";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
 
@@ -20,8 +21,9 @@ export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
       {/* if click menubar getSideBarOpen value will be true, if true and if width is lesser than 500px then navigation button will be visible */}
 
       <div className={`space-y-2 text-normal ${getSideBarOpen ? 'max-[500px]:block' : 'max-[500px]:hidden'} max-sm:text-md max-md:text-md`}>
-        <NavButton buttonIcon={<FaThLarge/>} buttonName={'Dashboard'} />
-        <NavButton buttonIcon={<FaUsers />} buttonName={'Users'} />
+
+        <NavLink to='/app/dashboard/admin' end><NavButton buttonIcon={<FaThLarge/>} buttonName={'Dashboard'} /></NavLink>
+        <NavLink to="/app/dashboard/admin/view/employees" end><NavButton buttonIcon={<FaUsers />} buttonName={'Users'} /></NavLink>
         <NavButton buttonIcon={<FaChartBar />} buttonName={'Analytics'} />
       </div>
     </aside>
