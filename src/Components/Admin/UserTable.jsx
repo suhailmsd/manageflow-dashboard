@@ -1,42 +1,44 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Pagination from './Pagination';
 import useEditModal from './TableEditModal/useEditModal'
 import EditUserModal from './TableEditModal/EditUserModal';
+import { UserContext, UsersListContext } from '../../Contexts';
 
 export default function UserTable() {
 
 
+  const {usersList,usersListLoading} = useContext(UsersListContext)
+  const {userDetails} = useContext(UserContext)  
+
+  const [currentUserForEdit,setCurrentUserForEdit] = useState();
+
+  const ref = useRef()
+
    const [currentUserPage,setCurrentUserPage] = useState(0);
 
    const {openModal,closeModal,isOpenModal} = useEditModal();
+   
+   let usersPerPage = 5
+   
+   let startIndex = currentUserPage * usersPerPage
+   let lastIndex = startIndex + usersPerPage
+   
+   let currentUsers = usersList?.slice(startIndex,lastIndex);
+   
 
-  const users = Array.from({ length: 100 }, (_, i) => ({
-  username: `user${i + 1}`,
-  department: ["HR", "IT", "Finance", "Sales", "Marketing"][i % 5],
-  role: ["Admin", "Manager", "Employee"][i % 3],
-  status: i % 2 === 0 ? "pending" : "active",
-}));
-
-let usersPerPage = 10
-
-let startIndex = currentUserPage * usersPerPage
-let lastIndex = startIndex + usersPerPage
-
-
-let currentUsers = users.slice(startIndex,lastIndex);
-
-function EditUser(){
+function EditUser(user){
   openModal()
+  setCurrentUserForEdit(user)
 }
-  
 
+  
 
   const tableStyle = 'w-full mx-auto bg-white text-black rounded-xl max-[380px]:rounded-lg max-[380px]:border-none overflow-hidden shadow-sm shadow-gray-500'
 
   return (
    <div className='p-4 max-[500px]:p-0 max-[500px]:mt-4 max-[380px]:overflow-x-scroll'>
-    <table className={tableStyle}>
+    <table className={`${tableStyle} relative`}>
       <thead className='bg-purple-800 dark:bg-purple-600 text-white'>
       <tr>
           <th className='table-head-cell'>Username</th>
@@ -46,10 +48,11 @@ function EditUser(){
           <th className='table-head-cell'>Actions</th>
       </tr>
       </thead>
-      <tbody>
+     {usersListLoading ?  <tbody><tr><td className='w-full text-xs'>Loading users...<div className='mx-auto h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div></td></tr></tbody>
+     : <tbody>
 
-    {currentUsers.map((user) => (
-      <tr className='border-b hover:bg-gray-50 transition' key={user.username}>
+    {currentUsers?.map((user) => (
+      <tr className='border-b hover:bg-gray-50 transition' key={user.id} ref={ref}>
           <td className='table-body-cell'>{user.username}</td>
           <td className='table-body-cell'>{user.department}</td>
           <td className='table-body-cell'>{user.role}</td>
@@ -60,7 +63,7 @@ function EditUser(){
 
           <td className= 'table-body-cell'>
             <div className='flex justify-center gap-4'>
-              <button onClick={EditUser}  title="Edit" className='text-blue-600 hover:text-blue-900 transition'>
+              <button onClick={() => EditUser(user)} title="Edit" className='text-blue-600 hover:text-blue-900 transition'>
         <FaEdit size="1.2em" />
       </button>
       <button title="Delete" className='text-red-500 hover:text-red-700 transition'>
@@ -71,11 +74,11 @@ function EditUser(){
       </tr>
     ))}
 
-      </tbody>
+      </tbody>}
     </table>
 
-    <Pagination totalUsers={users.length} usersPerPage={usersPerPage} setCurrentUserPage={setCurrentUserPage} currentUserPage={currentUserPage} />
-    {isOpenModal && <EditUserModal closeModal={closeModal}/>}
+    <Pagination totalUsers={usersList?.length} usersPerPage={usersPerPage} setCurrentUserPage={setCurrentUserPage} currentUserPage={currentUserPage}  />
+    {isOpenModal && <EditUserModal closeModal={closeModal} currentUserForEdit={currentUserForEdit}/>}
    </div>
   )
 }

@@ -37,6 +37,7 @@ export default function UpdateRequest(){
                 }));                
                 
             }
+             handleToast("success","User updated successfully")
             
 
 
@@ -44,7 +45,7 @@ export default function UpdateRequest(){
             setUpdateError(error.message)
         }finally{
             setUpdateLoading(false)
-            handleToast("success","User updated successfully")
+           
 
         }
 

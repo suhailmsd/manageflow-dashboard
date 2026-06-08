@@ -19,7 +19,7 @@ export default function ToastProvider({children}) {
     <ToastContext.Provider value={{setToastType,setToastMessage,handleToast}}>
         {children}
 
-     {loadingToast &&  <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30'>
+     {loadingToast &&  <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50'>
             <div className={`${toastType === "success" ? 'bg-green-500' : 'bg-red-500'} h-10 flex items-center justify-center w-64 rounded text-center`}>{toastMessage}<div className='top-1 left-2 absolute h-2 w-2 border-black bg-white border-2 rounded-full'></div></div>
         </div>}
 
