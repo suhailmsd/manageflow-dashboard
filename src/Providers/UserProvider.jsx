@@ -1,13 +1,15 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { FirebaseContext, UserContext } from "../Contexts";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection,getDocs, getFirestore, where, query } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../Hooks";
 
 export default function UserProvider({children}){
 
     const[userDetails,setUserDetails] = useState(null);
     const[userLoading,setUserLoading] = useState(true);
+    const {handleToast} = useToast();
 
     const auth = getAuth();
     const {firebase} = useContext(FirebaseContext)
@@ -35,6 +37,11 @@ export default function UserProvider({children}){
           ...snapshot.docs[0].data(),
           email: LoggedInuser.email,
         };
+
+        if(getUserToSave.status === "suspended"){
+          signOut(auth);
+          handleToast("failure","Account suspended by admin")
+        }
 
         setUserDetails(getUserToSave);
         setUserLoading(false)

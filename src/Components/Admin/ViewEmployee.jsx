@@ -1,7 +1,6 @@
 
-import { useContext } from 'react'
 import UserTable from './UserTable'
-import {UserContext, UsersListContext} from '../../Contexts'
+
 
 export default function ViewEmployee() {  
 

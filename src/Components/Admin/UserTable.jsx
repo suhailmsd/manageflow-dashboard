@@ -1,38 +1,55 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaEdit, FaTimes, FaTrash } from 'react-icons/fa';
 import Pagination from './Pagination';
 import useEditModal from './TableEditModal/useEditModal'
 import EditUserModal from './TableEditModal/EditUserModal';
 import { UserContext, UsersListContext } from '../../Contexts';
+import ApproveUserRequest from './ApproveUserRequest';
+import QuickActionButton from '../QuickApprovalAction/QuickActionButton';
 
 export default function UserTable() {
 
 
-  const {usersList,usersListLoading} = useContext(UsersListContext)
-  const {userDetails} = useContext(UserContext)  
+  const {usersList,usersListLoading,setUsersListUpdated} = useContext(UsersListContext)
+  const {userDetails} = useContext(UserContext)
 
   const [currentUserForEdit,setCurrentUserForEdit] = useState();
 
-  const ref = useRef()
+   const [currentUserPage,setCurrentUserPage] = useState(1);
 
-   const [currentUserPage,setCurrentUserPage] = useState(0);
+   const {openEditModal,closeEditModal,isOpenEditModal} = useEditModal();
 
-   const {openModal,closeModal,isOpenModal} = useEditModal();
+   const {updateStatus,isStatusUpdateSuccess} = ApproveUserRequest();
    
    let usersPerPage = 5
    
-   let startIndex = currentUserPage * usersPerPage
+   let startIndex = (currentUserPage - 1) * usersPerPage
    let lastIndex = startIndex + usersPerPage
+
+   let newUsersList = usersList?.filter(user => user.userId !== userDetails.userId)
    
-   let currentUsers = usersList?.slice(startIndex,lastIndex);
-   
+   let currentUsers = newUsersList?.slice(startIndex,lastIndex);
+
 
 function EditUser(user){
-  openModal()
+  openEditModal()
   setCurrentUserForEdit(user)
 }
 
-  
+function handleQuickStatusAction(user){
+  const statusToUpdate = user.status === 'suspended' ? 'active' : user.status === 'active' ? 'suspended' : user.status === 'pending' ? 'active' : null
+  const userToUpdate = {
+    userDocID: user.id,
+    status: statusToUpdate,
+    username:user.username,
+  }
+  updateStatus(userToUpdate)
+}
+
+useEffect(()=>{
+  setUsersListUpdated(true)
+},[isStatusUpdateSuccess])
+
 
   const tableStyle = 'w-full mx-auto bg-white text-black rounded-xl max-[380px]:rounded-lg max-[380px]:border-none overflow-hidden shadow-sm shadow-gray-500'
 
@@ -48,37 +65,38 @@ function EditUser(user){
           <th className='table-head-cell'>Actions</th>
       </tr>
       </thead>
-     {usersListLoading ?  <tbody><tr><td className='w-full text-xs'>Loading users...<div className='mx-auto h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div></td></tr></tbody>
-     : <tbody>
+      <tbody key={currentUserPage}>
+     {usersListLoading ?  (<tr><td colSpan={5} className='text-center py-4 text-xs'>Loading users...<div className='mx-auto h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div></td></tr>)
+     :
 
-    {currentUsers?.map((user) => (
-      <tr className='border-b hover:bg-gray-50 transition' key={user.id} ref={ref}>
+    (currentUsers?.map((user) => (
+      <tr className='border-b hover:bg-gray-50 transition' key={user.id}>
           <td className='table-body-cell'>{user.username}</td>
           <td className='table-body-cell'>{user.department}</td>
           <td className='table-body-cell'>{user.role}</td>
           <td className='table-body-cell'>
-            <span className='bg-green-100 text-green-700 rounded-full px-3 py-1 max-[500px]:p-1'
-            ><button>{user.status}</button></span>
+            <span className='bg-green-100 text-green-700 rounded-full px-3 py-1 max-[500px]:p-1'>
+              <button>{user.status}</button></span>
           </td>
 
           <td className= 'table-body-cell'>
-            <div className='flex justify-center gap-4'>
-              <button onClick={() => EditUser(user)} title="Edit" className='text-blue-600 hover:text-blue-900 transition'>
+            <div className='flex justify-between gap-2'>
+              <button onClick={() => handleQuickStatusAction(user)}> <QuickActionButton user={user}/> </button>
+              <button onClick={() => EditUser(user)} title="Edit" className='text-blue-600 hover:text-blue-900 text-lg'>
         <FaEdit size="1.2em" />
       </button>
-      <button title="Delete" className='text-red-500 hover:text-red-700 transition'>
+      {/* <button title="Delete" className='text-red-500 hover:text-red-700 transition'>
         <FaTrash size="1.2em" />
-      </button>
+      </button> */}
             </div>
           </td>
       </tr>
-    ))}
-
-      </tbody>}
+    )))
+    }</tbody>
     </table>
 
-    <Pagination totalUsers={usersList?.length} usersPerPage={usersPerPage} setCurrentUserPage={setCurrentUserPage} currentUserPage={currentUserPage}  />
-    {isOpenModal && <EditUserModal closeModal={closeModal} currentUserForEdit={currentUserForEdit}/>}
+    <Pagination totalUsers={newUsersList?.length} usersPerPage={usersPerPage} setCurrentUserPage={setCurrentUserPage} currentUserPage={currentUserPage}  />
+    {isOpenEditModal && <EditUserModal closeEditModal={closeEditModal} currentUserForEdit={currentUserForEdit}/>}
    </div>
   )
 }

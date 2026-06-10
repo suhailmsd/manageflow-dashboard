@@ -3,14 +3,15 @@ import { FaTimesCircle } from "react-icons/fa"
 import { FaTimeline } from "react-icons/fa6"
 import EditUiValidation from "./EditUiValidation"
 import UserEditRequest from "./UserEditRequest"
-import { UsersListContext } from "../../../Contexts"
+import { UserContext, UsersListContext } from "../../../Contexts"
 
 
-export default function EditUserModal({closeModal,currentUserForEdit}) {
+export default function EditUserModal({closeEditModal,currentUserForEdit}) {
 
   const {isLoading,updateUser,updateSuccess} = UserEditRequest();
 
-  const {setUsersListUpdated} = useContext(UsersListContext)
+  const {setUsersListUpdated,usersList} = useContext(UsersListContext)
+  const {userDetails} = useContext(UserContext)
 
   const [editForm,setEditForm] = useState({
     username:currentUserForEdit.username,
@@ -21,6 +22,7 @@ export default function EditUserModal({closeModal,currentUserForEdit}) {
     role:currentUserForEdit.role,
     status:currentUserForEdit.status
   })
+  
 
   const [editFormError,setEditFormError] = useState(null)
 
@@ -54,6 +56,8 @@ export default function EditUserModal({closeModal,currentUserForEdit}) {
 
     const {isUsernameInvalid,isFirstNameInvalid,isLastNameInvalid,isPhoneInvalid} = EditUiValidation(editForm)
 
+    const hasOneAdmin = usersList.filter(user => user.role === 'admin').length
+
     if(!editForm.username.trim()){
       errors.username = "username shouldn't be empty";
     }else if(isUsernameInvalid){
@@ -78,9 +82,16 @@ export default function EditUserModal({closeModal,currentUserForEdit}) {
       errors.lastName = "Phone number with country code required"
     }
 
+    if(userDetails?.role === "employee" && hasOneAdmin === 1 && editForm.role !== "admin"){
+      errors.role = "Must have one admin user"
+    }
+    
+
     setEditFormError(errors);
     return errors;
   }
+
+  
 
 
   let hasChanges = (editForm.username.trim() !== currentUserForEdit.username) || (editForm.firstName.trim() !== currentUserForEdit.firstName) || (editForm.lastName.trim() !== currentUserForEdit.lastName) || (editForm.phone.trim() !== currentUserForEdit.phone) || (editForm.role.trim() !== currentUserForEdit.role) || (editForm.department.trim() !== currentUserForEdit.department) || (editForm.status.trim() !== (currentUserForEdit.status))
@@ -112,7 +123,7 @@ if(hasChanges){
 
   useEffect(()=>{
     if(updateSuccess){
-      closeModal();
+      closeEditModal();
       setUsersListUpdated(true)
     }
   },[updateSuccess])
@@ -123,12 +134,12 @@ if(hasChanges){
 
   return (
    <>
-  <div onClick={closeModal} className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+  <div onClick={closeEditModal} className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
 
   <div className="fixed z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center max-[600px]:px-4">
     <form className="relative dark:bg-gray-800 flex flex-col gap-3 p-4 pt-10 max-[600px]:px-2 max-[600px]:pt-5 rounded-xl w-full max-w-[400px] bg-slate-50" onSubmit={handleSubmitforEdit}>
       <h2 className="font-bold text-center text-xl max[500px]:text-md">Update User Information</h2>
-      <button onClick={closeModal} className="text-xl absolute top-2 right-2 text-red-500 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400"><FaTimesCircle /></button>
+      <button onClick={closeEditModal} className="text-xl absolute top-2 right-2 text-red-500 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400"><FaTimesCircle /></button>
      <div className="input-group relative w-full">
       <input type="text" name="username" placeholder="  " required className={inputStyle} onChange={handleChange} value={editForm.username}/>
       <label htmlFor="" className={labelStyle}>Username</label>
@@ -137,13 +148,13 @@ if(hasChanges){
 
     <div className="flex gap-2 max-[600px]:flex-col">
        <div className="input-group relative w-full">
-      <input type="text" name="firstName" placeholder="  " required className={inputStyle} onChange={handleChange} value={editForm.firstName}/>
+      <input type="text" name="firstName" placeholder="  " className={inputStyle} onChange={handleChange} value={editForm.firstName}/>
       <label htmlFor="" className={labelStyle}>FirstName</label>
       {editFormError?.firstName && <div className='text-red-500 text-sm mt-2'>{editFormError.firstName}</div>}
     </div>
 
       <div className="input-group relative w-full">
-      <input type="text" name="lastName" placeholder="  " required className={inputStyle} onChange={handleChange} value={editForm.lastName} />
+      <input type="text" name="lastName" placeholder="  " className={inputStyle} onChange={handleChange} value={editForm.lastName} />
       <label htmlFor="" className={labelStyle}>Lastname</label>
       {editFormError?.lastName && <div className='text-red-500 text-sm mt-2'>{editFormError.lastName}</div>}
     </div>
@@ -151,7 +162,7 @@ if(hasChanges){
 
      <div className="flex gap-2 max-[600px]:flex-col">
       <div className="input-group relative w-full">
-      <input type="number" name="phone" placeholder="  " required className={inputStyle} onChange={handleChange} value={editForm.phone}/>
+      <input type="number" name="phone" placeholder="  " className={inputStyle} onChange={handleChange} value={editForm.phone}/>
       <label htmlFor="" className={labelStyle}>Phone</label>
       {editFormError?.phone && <div className='text-red-500 text-sm mt-2'>{editFormError.phone}</div>}
     </div>
@@ -174,12 +185,13 @@ if(hasChanges){
       </select>
       <label htmlFor="" className={optionsLabelStyle}>Role</label>
       {editForm?.role === '' && <div className='text-xs text-red-500 mt-1'>Role needed</div> }
+      {editFormError?.role && <div className='text-red-500 text-sm mt-2'>{editFormError.role}</div>}
     </div>
      <div className="input-group relative w-full">
       <select name="status" id="" className={inputStyle} onChange={handleChange} value={editForm.status}>
         <option value="active">Active</option>
         <option value="pending">Pending</option>
-        <option value="suspend">Suspend</option>
+        <option value="suspended">Suspend</option>
       </select>
       <label htmlFor="" className={optionsLabelStyle}>Status</label>
       {editForm?.status === '' && <div className='text-xs text-red-500 mt-1'>Status needed</div> }

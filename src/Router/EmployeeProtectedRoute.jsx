@@ -15,7 +15,7 @@ export default function UserProtectedRoute() {
     return <Navigate to="/" />
   }
 
-  if(userDetails.role !== "employee"){
+  if(userDetails?.role !== "employee"){
     return <Navigate to="/app/dashboard/admin" />
   }
   

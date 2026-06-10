@@ -5,9 +5,11 @@ import './index.css'
 import FirebaseProvider from './Providers/FirebaseProvider.jsx'
 import UserProvider from './Providers/UserProvider.jsx'
 import UsersListProvider from './Providers/UsersListProvider.jsx'
+import ToastProvider from './Providers/ToastProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <ToastProvider>
     <FirebaseProvider>
       <UserProvider>
         <UsersListProvider>
@@ -15,5 +17,6 @@ createRoot(document.getElementById('root')).render(
     </UsersListProvider>
     </UserProvider>
     </FirebaseProvider>
+    </ToastProvider>
   </StrictMode>,
 )

@@ -24,13 +24,13 @@ export default function UserEditRequest() {
 
             await updateDoc(collectionRef,userForm);
 
-            handleToast("success","User updated successfully");
 
             setUpdateSuccess('success to close modal')
 
 
         }catch(error){
             console.log(error.message);
+            handleToast("failure",error.message);
             setEditError(error.message)
             
         }finally{

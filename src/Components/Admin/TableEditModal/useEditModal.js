@@ -2,19 +2,19 @@ import { useState } from "react";
 
 export default function useEditModal(){
 
-    const [isOpenModal,setIsOpenModal] = useState(false)
+    const [isOpenEditModal,setIsOpenModal] = useState(false)
 
-    function openModal(){
+    function openEditModal(){
         setIsOpenModal(true)
         
     }
 
-    function closeModal(){
+    function closeEditModal(){
         setIsOpenModal(false)
         
     }
 
     return {
-        openModal,closeModal,isOpenModal
+        openEditModal,closeEditModal,isOpenEditModal
     }
 }

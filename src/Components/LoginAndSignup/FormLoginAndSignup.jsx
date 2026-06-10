@@ -155,12 +155,13 @@ export default function FormRegisterAndLogin({buttonTitle,mode}) {
                         <label htmlFor="">Department</label>
                         <select id="" className={`${inputStyle} bg-white`} name="department" onChange={handleInputChange}>
                             <option selected disabled>Select an option</option>
-                            <option  value="IT" className='bg-slate-200'>IT</option>
-                            <option value="HR" className='bg-slate-200'>HR</option>
+                            <option  value="IT" className='bg-slate-200 dark:bg-gray-900'>IT</option>
+                            <option value="HR" className='bg-slate-200 dark:bg-gray-900'>HR</option>
                         </select>
                         {form.department === '' && <div className='text-xs text-red-500 mt-1'>Department needed</div> }
                     </div>
                 </div>}
+                {mode==='register' && signupError &&  <div className='bg-transparent w-full py-3 rounded-lg shadow-sm font-semibold text-center text-red-500 border border-red-900 mt-5'>{signupError}</div>}
                 <button disabled={disableButton} className={`bg-blue-500 w-full py-3 rounded-lg hover:bg-blue-600 shadow-sm hover:shadow text-white font-semibold transition-all duration-200 ${disableButton ? 'opacity-50 cursor-not-allowed' : ''}`}>{buttonTitle}</button>
                 {mode==='login' && isLoginLoading && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}
                 {mode==='register' && loadingSignupRequest && <div className='absolute top-1/2 left-1/2 -tranlate-y-1/4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div>}

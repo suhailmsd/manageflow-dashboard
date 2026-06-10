@@ -10,7 +10,7 @@ export default function UseSignupRequest(){
 
 
     const {setIsSignupState} = useContext(UserContext)
-    const {handleToast,setToastType,setToastMessage} = useToast();
+    const {handleToast} = useToast();
 
     const {firebase} = useContext(FirebaseContext)
     const auth = getAuth();
@@ -51,10 +51,8 @@ export default function UseSignupRequest(){
         }catch(error){
             if(error.message === "Firebase: Error (auth/email-already-in-use)."){
                 setSignupError('Email already exists')
-                handleToast("failure","Auth Error: invalid Email")
                 return
             }
-            setSignupError(error.message)
         }finally{
             setLoadingSignupRequest(false)
         }

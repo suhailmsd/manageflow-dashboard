@@ -21,7 +21,7 @@ export default function UsersListProvider({children}) {
         try{
           setUsersListLoading(true)
         
-        const userSearchQuery = await query(collection(firestoreDb,"Users"),where("userId","!=", userDetails?.userId));
+        const userSearchQuery = await query(collection(firestoreDb,"Users"));
 
         const snapshot = await getDocs(userSearchQuery);
 

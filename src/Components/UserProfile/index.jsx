@@ -1,9 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ToastContext, UserContext } from '../../Contexts'
-import { FaBeer, FaEdit, FaRegSquare, FaTimes, FaTimesCircle, FaUserTimes } from 'react-icons/fa'
+import { FaBeer, FaEdit, FaRegSquare, FaTimes, FaTimesCircle, FaTrash, FaUserTimes } from 'react-icons/fa'
 import { GoIssueDraft } from 'react-icons/go'
 import UpdateRequest from './UpdateRequest'
 import LoadingSpinner from '../Loading/LoadingSpinner'
+import useModal from '../../Hooks/useModal'
+import ModalBox from '../Modal/ModalBox'
+import DeleteUserRequest from './DeleteUserRequest'
 
 export default function UserProfile() {
 
@@ -12,7 +15,11 @@ export default function UserProfile() {
   const {userDetails} = useContext(UserContext)
   const {handleToast} = useContext(ToastContext)
 
-  const {updateLoading,setUpdateError,update} = UpdateRequest()
+  const {updateLoading,setUpdateError,update} = UpdateRequest();
+  const {deleteCurrentUser,isLoadingDeleteRequest,isDeleteUserSuccess} = DeleteUserRequest();
+
+
+  const {modalTitle,openModal,isModalOpen,closeModal} = useModal();
 
 
   const [updateProfileForm,setUpdateProfileForm] = useState({
@@ -57,6 +64,12 @@ export default function UserProfile() {
         }))
 
   }
+
+  useEffect(()=>{
+    if(isDeleteUserSuccess){
+      closeModal();
+    }
+  },[isDeleteUserSuccess])
 
   const {isfirstNameInvalid,islastNameInvalid,isPhoneInvalid} = formInvalidCheck(updateProfileForm)
 
@@ -111,6 +124,15 @@ export default function UserProfile() {
 
   }
 
+  function handleDeleteUser(username){
+    console.log('delelee');
+    openModal(`Are you sure want to delete ${username}?`)
+    
+  }
+
+  function handleConfirmDeleteUser(){
+    deleteCurrentUser(userDetails.userId)
+  }
 
 
 
@@ -168,15 +190,22 @@ export default function UserProfile() {
               {updateProfileFormError.phone && <div className='text-red-500 text-sm mt-2'>{updateProfileFormError.phone}</div>}
             </div>
 
-            {hasChangesInForm && <button onClick={handleFormError} className="dark:bg-indigo-500 dark:hover:bg-indigo-400 bg-indigo-400 hover:bg-indigo-500 transition px-4 py-2 text-sm sm:text-base w-full sm:w-40 rounded-lg font-bold">Save Changes</button>}
+            
+            <div className='flex justify-between transition max-sm:flex-col gap-2'>
+              {hasChangesInForm && <button onClick={handleFormError} className="dark:bg-indigo-500 dark:hover:bg-indigo-400 bg-indigo-400 hover:bg-indigo-500 transition px-4 py-2 text-sm sm:text-base w-full sm:w-40 rounded-lg font-bold">Save Changes</button>}
+              <button onClick={()=>handleDeleteUser(userDetails?.username)}  className='bg-red-500 hover:bg-red-600 dark:bg-red-500 dark:hover:bg-red-400 transition px-4 py-2 text-sm sm:text-base w-full sm:w-40 rounded-lg font-bold'>Delete User</button>
+            </div>
 
           </form>
+
         </div>
       )}
+      {isModalOpen && <ModalBox modalTitle={modalTitle} cancelModal={closeModal} confirmModal={handleConfirmDeleteUser} confirmButtonTitle={'Delete'}></ModalBox> }
     </div>
     <div className="fixed z-index 20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
     {updateLoading && <LoadingSpinner />}
     </div>
+    {isLoadingDeleteRequest && <div><div className='fixed inset-0 bg-black/50 z-0 backdrop-blur-sm'></div><div className='fixed z-50 top-1/2 left-1/2 -tranlate-y-1/4 h-16 w-16 animate-spin rounded-full border-4 border-blue-500 border-t-transparent'></div></div>}
   </div>
 );
 }
