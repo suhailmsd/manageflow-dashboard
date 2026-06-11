@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { UserContext } from '../Contexts';
 import { Navigate, Outlet } from 'react-router-dom';
-import LoadingSpinner from '../Components/Loading/LoadingSpinner'
+import LoadingSpinner from '../Features/Shared/Components/Loading/LoadingSpinner'
 
 export default function AdminProtectedRoute() {
 

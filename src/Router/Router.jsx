@@ -1,15 +1,14 @@
-import React, { useContext, useState } from 'react'
-import { createBrowserRouter, useNavigate } from 'react-router-dom'
+import { createBrowserRouter} from 'react-router-dom'
 
-import UserHome from '../Pages/Home/UserHome'
-import AdminHome from '../Pages/Home/AdminHome'
+import EmployeeHome from '../Pages/Employee/EmployeeHome'
+import AdminHome from '../Pages/Admin/AdminHome'
 import Login from '../Pages/Login'
 import NoutFound from '../Pages/NotFound'
 import Layout from '../Layout/Layout'
-import Header from '../Components/Header/Header'
-import EmployeeProfile from '../Pages/Profile/EmployeeProfile'
-import AdminProfile from '../Pages/Profile/AdminProfile'
-import EmployeeDetails from '../Pages/AdminAction/EmployeeDetails'
+import Header from '../Features/Shared/Components/Header/Header'
+import EmployeeProfilePage from '../Pages/Employee/EmployeeProfilePage'
+import AdminProfilePage from '../Pages/Admin/AdminProfilePage'
+import UserFullDetails from '../Pages/Admin/UserFullDetails'
 import AdminProtectedRoute from './AdminProtectedRoute'
 import EmployeeProtectedRoute from './EmployeeProtectedRoute'
 
@@ -28,8 +27,8 @@ const router = createBrowserRouter([,
                 {
                     element:<EmployeeProtectedRoute />,
                     children:[
-                        {index:true,element:<UserHome />},
-                        {path:"profile",element:<EmployeeProfile />}
+                        {index:true,element:<EmployeeHome />},
+                        {path:"profile",element:<EmployeeProfilePage />}
                     ]
             },
                 
@@ -37,8 +36,8 @@ const router = createBrowserRouter([,
                     element:<AdminProtectedRoute />,
                     children:[
                     {index:true, element:<AdminHome />},
-                    {path:"profile", element:<AdminProfile />},
-                    {path:"view/employees", element:<EmployeeDetails />}
+                    {path:"profile", element:<AdminProfilePage />},
+                    {path:"view/employees", element:<UserFullDetails />}
                 ]
                 }
             ]

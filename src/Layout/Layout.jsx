@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Header from '../Components/Header/Header'
-import SideBar from '../Components/Sidebar/SideBar'
-import useTheme from '../Hooks/useTheme';
+import Header from '../Features/Shared/Components/Header/Header'
+import SideBar from '../Features/Shared/Components/Sidebar/SideBar'
+import {useTheme} from '../Hooks';
 import {useContext, useState } from 'react';
 import { UserContext } from '../Contexts';
 

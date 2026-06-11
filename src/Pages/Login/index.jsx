@@ -1,4 +1,4 @@
-import FormToggle from "../../Components/LoginAndSignup/FormToggleCard";
+import FormToggle from "../../Features/Shared/Components/LoginAndSignup/FormToggleCard";
 
 
 export default function Login() {

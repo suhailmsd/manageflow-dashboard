@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FirebaseContext, UserContext } from "../Contexts";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection,getDocs, getFirestore, where, query } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "../Hooks";
 
 export default function UserProvider({children}){
