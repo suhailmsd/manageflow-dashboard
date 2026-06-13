@@ -31,7 +31,7 @@ export default function Header() {
 
   return (
    <div>
-     <header className="[grid-area:header] h-16 flex items-center justify-end px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+     <header className="[grid-area:header] h-16 flex items-center justify-end px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 max-[380px]:px-1">
       <div className="flex items-center gap-4 max-[500px]:gap-2">
 
         {userDetails && location.pathname !== ("/app/dashboard" && "/app/dashboard/admin") && <NavLink to={`${userDetails.role === 'employee'? '/app/dashboard' : '/app/dashboard/admin'}`} end>{({isActive}) => (<button className="text-black dark:text-white text-md  px-1 border-b border-gray-400 hover:border-gray-300">{<FaHome size='2em' className={`${isActive ? 'translate-y-1' : ''} max-[500px]:text-md`} />}</button>)}</NavLink>}

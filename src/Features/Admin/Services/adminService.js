@@ -34,6 +34,7 @@ export const quickEditUser = () => {
 
         }finally{
             setIsLoadingStatusUpdate(false)
+            setIsStatusUpdateSuccess(null)
         }
     }
 

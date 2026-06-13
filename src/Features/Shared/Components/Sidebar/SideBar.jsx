@@ -23,8 +23,8 @@ export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
       <div className={`space-y-2 text-normal ${getSideBarOpen ? 'max-[500px]:block' : 'max-[500px]:hidden'} max-sm:text-md max-md:text-md`}>
 
         <NavLink to='/app/dashboard/admin' end><NavButton buttonIcon={<FaThLarge/>} buttonName={'Dashboard'} /></NavLink>
-        <NavLink to="/app/dashboard/admin/view/employees" end><NavButton buttonIcon={<FaUsers />} buttonName={'Users'} /></NavLink>
-        <NavButton buttonIcon={<FaChartBar />} buttonName={'Analytics'} />
+        <NavLink to="/app/dashboard/admin/view/users" end><NavButton buttonIcon={<FaUsers />} buttonName={'Users'} /></NavLink>
+        <NavLink to="/app/dashboard/admin/view/analytics" end><NavButton buttonIcon={<FaChartBar />} buttonName={'Analytics'} /></NavLink>
       </div>
     </aside>
   )

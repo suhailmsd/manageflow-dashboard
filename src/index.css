@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.table-head-cell{
-    @apply text-left px-6 py-3 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[10px] max-xl:px-2
-}
-
-.table-body-cell{
-    @apply px-6 py-3 max-[500px]:p-1 text-sm max-[380px]:px-1 max-[380px]:text-[9px] max-xl:px-2
-}
-
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -32,4 +23,31 @@
 .dark .profile-input input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px #0f172a inset !important; /* slate-900 */
   -webkit-text-fill-color: #fff !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-global-setting{
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #f5f3ff;
+}
+
+.scrollbar-global-setting::-webkit-scrollbar{
+  width: 8px;
+}
+
+.scrollbar-global-setting::-webkit-scrollbar-track{
+  background: #f5f3ff;
+}
+
+.scrollbar-global-setting::-webkit-scrollbar-thumb{
+  background: #8b5cf6;
+  border-radius: 9999px;
 }

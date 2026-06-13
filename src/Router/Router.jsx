@@ -1,8 +1,9 @@
 import { createBrowserRouter} from 'react-router-dom'
 
 import EmployeeHome from '../Pages/Employee/EmployeeHome'
-import AdminHome from '../Pages/Admin/AdminHome'
+import AdminHomePage from '../Pages/Admin/AdminHomePage'
 import Login from '../Pages/Login'
+import UsersAnalytics from '../Pages/Admin/UsersAnalytics'
 import NoutFound from '../Pages/NotFound'
 import Layout from '../Layout/Layout'
 import Header from '../Features/Shared/Components/Header/Header'
@@ -35,9 +36,10 @@ const router = createBrowserRouter([,
                 {path:"admin",
                     element:<AdminProtectedRoute />,
                     children:[
-                    {index:true, element:<AdminHome />},
+                    {index:true, element:<AdminHomePage />},
                     {path:"profile", element:<AdminProfilePage />},
-                    {path:"view/employees", element:<UserFullDetails />}
+                    {path:"view/users", element:<UserFullDetails />},
+                    {path:"view/analytics", element:<UsersAnalytics />}
                 ]
                 }
             ]
