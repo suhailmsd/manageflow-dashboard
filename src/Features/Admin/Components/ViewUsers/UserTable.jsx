@@ -47,7 +47,7 @@ const tableHeadCell = ' text-left px-6 py-3 max-[500px]:py-4 text-sm max-[380px]
 const tableBodyCell = 'px-6 py-3 max-[500px]:py-3 text-sm max-[380px]:px-1 max-[380px]:text-[9px] max-xl:px-2'
 
   return (
-   <div className='p-4 max-[500px]:p-0 max-[500px]:mt-4 overflow-x-auto max-[380px]:max-w-[220px] max-[680px]:max-w-[400px] min-h-[300px] w-full scrollbar-global-setting'>
+   <div className='p-4 max-[500px]:p-0 max-[500px]:mt-4 overflow-x-auto max-[380px]:max-w-[220px] max-[680px]:max-w-[400px] min-h-[380px] max-[500px]:min-h-[200px] w-full scrollbar-global-setting'>
     <table className='w-full mx-auto bg-white text-black rounded-xl max-[380px]:border-none shadow-sm shadow-gray-500 overflow-hidden '>
       <thead className='bg-purple-800 dark:bg-purple-600 text-white'>
       <tr>

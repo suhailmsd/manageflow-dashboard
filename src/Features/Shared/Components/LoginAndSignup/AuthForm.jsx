@@ -5,11 +5,13 @@ import {FaEyeSlash, FaEye} from "react-icons/fa";
 import {signInUser} from '../../../../Firebase/authService';
 import {signUpUser} from '../../../../Firebase/authService';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../../../Contexts';
+import { AuthPermissionContext, UserContext } from '../../../../Contexts';
 
 export default function AuthForm({buttonTitle,mode}) {
 
     const {userDetails} = useContext(UserContext)
+
+    const {hasRole} = useContext(AuthPermissionContext)
 
     const navigate = useNavigate()
 
@@ -83,10 +85,10 @@ export default function AuthForm({buttonTitle,mode}) {
     }
 
     useEffect(()=>{
-        if(userDetails?.role === "employee"){
+        if(hasRole('employee')){
             navigate("/app/dashboard")
         }
-        if(userDetails?.role === "admin"){
+        if(hasRole('admin')){
             navigate("/app/dashboard/admin")
         }
 

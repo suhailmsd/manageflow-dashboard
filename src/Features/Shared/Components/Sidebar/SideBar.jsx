@@ -1,10 +1,14 @@
 import {FaThLarge,FaUsers,FaChartBar, FaBars} from "react-icons/fa";
 import NavButton from "./NavButton";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+import {AuthPermissionContext} from '../../../../Contexts'
+import { TbLogs } from "react-icons/tb";
+import { LuLogs } from "react-icons/lu";
 
 export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
 
+  const {hasPermission} = useContext(AuthPermissionContext)
 
   function handleMenuBar(){
     setGetSideBarOpen(prev => !prev)
@@ -22,9 +26,10 @@ export default function SideBar({getSideBarOpen, setGetSideBarOpen}) {
 
       <div className={`space-y-2 text-normal ${getSideBarOpen ? 'max-[500px]:block' : 'max-[500px]:hidden'} max-sm:text-md max-md:text-md`}>
 
-        <NavLink to='/app/dashboard/admin' end><NavButton buttonIcon={<FaThLarge/>} buttonName={'Dashboard'} /></NavLink>
-        <NavLink to="/app/dashboard/admin/view/users" end><NavButton buttonIcon={<FaUsers />} buttonName={'Users'} /></NavLink>
-        <NavLink to="/app/dashboard/admin/view/analytics" end><NavButton buttonIcon={<FaChartBar />} buttonName={'Analytics'} /></NavLink>
+        <NavLink to="/app/dashboard/admin" end className={({ isActive }) => `flex items-center gap-3 m-2 ${isActive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500' : 'bg-blue-500 dark:bg-blue-600'} hover:bg-blue-600 text-gray-900 font-semibold dark:text-slate-100 dark:hover:text-white dark:hover:bg-blue-500 w-full p-2 rounded-md group transition duration-100 mx-auto max-[500px]:text-sm`}><NavButton buttonIcon={<FaThLarge />} buttonName="Dashboard" /></NavLink>
+        <NavLink to="/app/dashboard/admin/view/users" end className={({ isActive }) => `flex items-center gap-3 m-2 ${isActive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500' : 'bg-blue-500 dark:bg-blue-600'} hover:bg-blue-600 text-gray-900 font-semibold dark:text-slate-100 dark:hover:text-white dark:hover:bg-blue-500 w-full p-2 rounded-md group transition duration-100 mx-auto max-[500px]:text-sm`}><NavButton buttonIcon={<FaUsers />} buttonName="Users" /></NavLink>
+        <NavLink to="/app/dashboard/admin/view/analytics" end className={({ isActive }) => `flex items-center gap-3 m-2 ${isActive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500' : 'bg-blue-500 dark:bg-blue-600'} hover:bg-blue-600 text-gray-900 font-semibold dark:text-slate-100 dark:hover:text-white dark:hover:bg-blue-500 w-full p-2 rounded-md group transition duration-100 mx-auto max-[500px]:text-sm`}><NavButton buttonIcon={<FaChartBar />} buttonName="Analytics" /></NavLink>
+        {hasPermission('view_logs') && <NavLink to="/app/dashboard/admin/view/logs" end className={({ isActive }) => `flex items-center gap-3 m-2 ${isActive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500' : 'bg-blue-500 dark:bg-blue-600'} hover:bg-blue-600 text-gray-900 font-semibold dark:text-slate-100 dark:hover:text-white dark:hover:bg-blue-500 w-full p-2 rounded-md group transition duration-100 mx-auto max-[500px]:text-sm`}><NavButton buttonIcon={<LuLogs />} buttonName="Logs" /></NavLink>}
       </div>
     </aside>
   )

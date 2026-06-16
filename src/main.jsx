@@ -6,15 +6,18 @@ import FirebaseProvider from './Providers/FirebaseProvider.jsx'
 import UserProvider from './Providers/UserProvider.jsx'
 import UsersListProvider from './Providers/UsersListProvider.jsx'
 import ToastProvider from './Providers/ToastProvider.jsx'
+import AuthPermissionProvider from './Providers/AuthPermissionProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ToastProvider>
     <FirebaseProvider>
       <UserProvider>
+        <AuthPermissionProvider>
         <UsersListProvider>
     <App />
     </UsersListProvider>
+     </AuthPermissionProvider>
     </UserProvider>
     </FirebaseProvider>
     </ToastProvider>

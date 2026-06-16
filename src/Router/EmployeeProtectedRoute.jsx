@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { Navigate, Outlet } from 'react-router-dom';
-import { UserContext } from '../Contexts';
+import { AuthPermissionContext, UserContext } from '../Contexts';
 import LoadingSpinner from '../Features/Shared/Components/Loading/LoadingSpinner';
 
 export default function UserProtectedRoute() {
 
   const {userLoading,userDetails} = useContext(UserContext);
+  const {hasRole} = useContext(AuthPermissionContext)
 
   if(userLoading){
     return <LoadingSpinner />
@@ -15,7 +16,7 @@ export default function UserProtectedRoute() {
     return <Navigate to="/" />
   }
 
-  if(userDetails?.role !== "employee"){
+  if(hasRole('admin')){
     return <Navigate to="/app/dashboard/admin" />
   }
   

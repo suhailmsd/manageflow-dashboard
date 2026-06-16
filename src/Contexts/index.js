@@ -8,5 +8,7 @@ export const UserContext = createContext();
 
 export const UsersListContext = createContext();
 
+export const AuthPermissionContext = createContext();
+
 
 export const ToastContext = createContext();

@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {FirebaseContext, UserContext, UsersListContext} from '../Contexts/'
+import {AuthPermissionContext, FirebaseContext, UserContext, UsersListContext} from '../Contexts/'
 import { collection,getDocs, getFirestore, where, query } from "firebase/firestore";
 
 export default function UsersListProvider({children}) {
+
+
+  const {hasRole} = useContext(AuthPermissionContext)
 
   const {firebase} = useContext(FirebaseContext);
   const firestoreDb = getFirestore(firebase)
@@ -15,7 +18,7 @@ export default function UsersListProvider({children}) {
     const [usersListUpdated,setUsersListUpdated] = useState(false);
 
    useEffect(()=>{
-    if(userDetails?.role === 'admin'){
+    if(hasRole('admin')){
       
       async function fetchAllUsersfromFirestore(){
         try{
