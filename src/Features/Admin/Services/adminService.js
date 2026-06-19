@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import {FirebaseContext, ToastContext} from '../../../Contexts'
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import {FirebaseContext, ToastContext, UserContext, UsersListContext} from '../../../Contexts'
+import { getFirestore, doc, updateDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 
 export const quickEditUser = () => {
@@ -11,8 +11,9 @@ export const quickEditUser = () => {
     const[isStatusUpdateSuccess,setIsStatusUpdateSuccess] = useState(null);
     const [isLoadingStatusUpdate,setIsLoadingStatusUpdate] = useState(false);
     const [statusUpdateError,setStatusUpdateErrorError] = useState(null);
+    const {setUsersListUpdated} = useContext(UsersListContext)
     
-    async function updateStatus({userDocID,status}){
+    async function updateStatus({userDocID,userId,status,previousStatus,username},{loggedInUserId,loggedInUsername,loggedInUserRole}){
 
         try{
             setIsLoadingStatusUpdate(true);
@@ -23,7 +24,11 @@ export const quickEditUser = () => {
                 status:status
             });
 
-            setIsStatusUpdateSuccess('status updated successfully')
+            const logsCollectionRef = collection(firestoreDb,"logs");
+            await addDoc(logsCollectionRef, {action:'STATUS_CHANGED',targetUserId:userId,targetUsername:username,performedBy:loggedInUserRole,performedByUserId:loggedInUserId,performedByUsername:loggedInUsername,previousStatus:previousStatus,newStatus:status,timestamp:serverTimestamp()})
+
+            setUsersListUpdated(true)
+            // setIsStatusUpdateSuccess('status updated successfully')
             
 
 
@@ -57,14 +62,28 @@ export const editUser = () => {
     const [editError,setEditError] = useState(null);
     const [updateSuccess,setUpdateSuccess] = useState(null)
 
-    async function updateUser(userForm,currentUserDocID){
+    async function updateUser(userForm,{editUserDocId,editUserId,editUserPreviousRole,editUserNewRole,editUserPreviousDepartment,editUserNewDepartment,editUserPreviousStatus,editUserNewStatus},{loggedInUserRole,loggedInUserId,loggedInUsername}){
         try{
             setIsLoading(true);
 
-            const collectionRef = await doc(firestoreDb,"Users",currentUserDocID);
+            const collectionRef = await doc(firestoreDb,"Users",editUserDocId);
 
             await updateDoc(collectionRef,userForm);
 
+            const logsCollectionRef = collection(firestoreDb,"logs");
+            
+            if(editUserPreviousRole !== editUserNewRole){
+                await addDoc(logsCollectionRef, {action:'ROLE_CHANGED',targetUserId:editUserId,targetUsername:userForm.username,performedBy:loggedInUserRole,performedByUserId:loggedInUserId,performedByUsername:loggedInUsername,previousRole:editUserPreviousRole,newRole:editUserNewRole,timestamp:serverTimestamp()})
+            }
+
+            if(editUserPreviousDepartment !== editUserNewDepartment){
+                await addDoc(logsCollectionRef, {action:'DEPARTMENT_CHANGED',targetUserId:editUserId,targetUsername:userForm.username,performedBy:loggedInUserRole,performedByUserId:loggedInUserId,performedByUsername:loggedInUsername,previousDepartment:editUserPreviousDepartment,newDepartment:editUserNewDepartment,timestamp:serverTimestamp()})
+            }
+
+            if(editUserPreviousStatus !== editUserNewStatus){
+                await addDoc(logsCollectionRef, {action:'STATUS_CHANGED',targetUserId:editUserId,targetUsername:userForm.username,performedBy:loggedInUserRole,performedByUserId:loggedInUserId,performedByUsername:loggedInUsername,previousStatus:editUserPreviousStatus,newStatus:editUserNewStatus,timestamp:serverTimestamp()})
+            }
+            
 
             setUpdateSuccess('success to close modal')
 

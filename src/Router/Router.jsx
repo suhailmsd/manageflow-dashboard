@@ -13,6 +13,7 @@ import UserFullDetails from '../Pages/Admin/UserFullDetails'
 import AdminProtectedRoute from './AdminProtectedRoute'
 import EmployeeProtectedRoute from './EmployeeProtectedRoute'
 import LogsPage from '../Pages/Owner/LogsPage'
+import OwnerProtectedRoute from './OwnerProtectedRoute'
 
 const router = createBrowserRouter([,
         {
@@ -41,7 +42,9 @@ const router = createBrowserRouter([,
                     {path:"profile", element:<AdminProfilePage />},
                     {path:"view/users", element:<UserFullDetails />},
                     {path:"view/analytics", element:<UsersAnalytics />},
-                    {path:"view/logs", element:<LogsPage />}
+                    {path:"view/logs", element:<OwnerProtectedRoute />, 
+                        children:[{index:true, element: <LogsPage />}]
+                    }
                 ]
                 }
             ]

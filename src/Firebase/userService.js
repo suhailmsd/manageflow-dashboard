@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { FirebaseContext, ToastContext, UserContext } from "../Contexts";
-import { collection, getDocs, getFirestore, query, updateDoc, where,deleteDoc } from "firebase/firestore";
+import { collection, getDocs, getFirestore, query, updateDoc, where,deleteDoc, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth,deleteUser} from "firebase/auth";
 import { useToast } from '../Hooks';
 
@@ -72,7 +72,7 @@ export const deleteUserProfile =() => {
     const [deleteUserError,setDeleteUserError] = useState(null);
     const [isLoadingDeleteRequest,setIsLoadingDeleteRequest] = useState(false);
 
-    async function deleteCurrentUser(deleteUserId){
+    async function deleteCurrentUser(deleteUserId,deleteUsername){
         try{
             
         setIsLoadingDeleteRequest(true);
@@ -83,12 +83,16 @@ export const deleteUserProfile =() => {
       );
       
       const snapshot = await getDocs(userSearchQuery);
+       const logsCollectionRef = collection(firestoreDb,"logs");
 
       if (!snapshot.empty) {
         await deleteDoc(snapshot.docs[0].ref)
         await deleteUser(currentUser)
-       
+        await addDoc(logsCollectionRef, {action:'USER_DELETED',targetUserId:deleteUserId,targetUsername:deleteUsername,timestamp:serverTimestamp()})       
         };
+
+       
+
 
         setIsDeleteUserSuccess(true)
         await new Promise((resolve) => setTimeout(resolve,3000))

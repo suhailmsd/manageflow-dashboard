@@ -63,22 +63,16 @@ export default function EditUserModal({closeEditModal,currentUserForEdit}) {
       errors.username = "Only letters and numbers allowed with max 15 chars"
     }
 
-    if(!editForm.firstName.trim()){
-      errors.firstName = "First name shouldn't be empty"
-    }else if(isFirstNameInvalid){
+    if(!editForm.firstName === "" | isFirstNameInvalid){
       errors.firstName = "Only alphabets allowed not exceeding 20 chars, no spaces allowed"
     }
 
-    if(!editForm.lastName.trim()){
-      errors.lastName = "Last name shouldn't be empty"
-    }else if(isLastNameInvalid){
+    if(!editForm.lastName === "" | isLastNameInvalid){
       errors.lastName = "Last name shouldn't exceed 20 char and should'nt match firstname, no spaces allowed"
     }
 
-    if(!editForm.phone.trim()){
-      errors.lastName = "phone shouldn't be empty"
-    }else if(isPhoneInvalid){
-      errors.lastName = "Phone number with country code required"
+    if(!editForm.phone === "" | isPhoneInvalid){
+      errors.phone = "Phone number with country code required"
     }
 
     if(userDetails?.role === "employee" && hasOneAdmin === 1 && editForm.role !== "admin"){
@@ -114,7 +108,7 @@ if(hasChanges){
     department:editForm.department.trim(),
     role:editForm.role.trim(),
     status:editForm.status.trim()
-  },currentUserForEdit.id)
+  },{editUserDocId:currentUserForEdit.id,editUserId:currentUserForEdit.userId,editUserPreviousRole:currentUserForEdit.role,editUserNewRole:editForm.role,editUserPreviousDepartment:currentUserForEdit.department,editUserNewDepartment: editForm.department,editUserPreviousStatus:currentUserForEdit.status,editUserNewStatus:editForm.status},{loggedInUserRole:userDetails?.role,loggedInUserId:userDetails?.userId,loggedInUsername:userDetails?.username})
   
 }
 

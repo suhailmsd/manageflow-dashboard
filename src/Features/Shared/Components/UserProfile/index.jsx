@@ -115,7 +115,7 @@ export default function UserProfile() {
   }
 
   function handleEditMode(){
-    if(userDetails.status !== 'active'){
+    if(userDetails.status === 'pending'){
       handleToast("failure","Update profile locked by admin")
     }else{
       setIsEditMode(prev => !prev)
@@ -130,7 +130,7 @@ export default function UserProfile() {
   }
 
   function handleConfirmDeleteUser(){
-    deleteCurrentUser(userDetails.userId)
+    deleteCurrentUser(userDetails.userId,userDetails.username)
   }
 
 

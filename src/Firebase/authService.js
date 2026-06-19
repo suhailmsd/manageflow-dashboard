@@ -2,7 +2,7 @@ import UiValidation from "../Features/Shared/Components/LoginAndSignup/UiValidat
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword, getAuth, signOut } from "firebase/auth";
 import { useContext, useState } from "react";
 import { FirebaseContext, UserContext } from "../Contexts";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
 import { useToast } from "../Hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -95,8 +95,11 @@ export const signUpUser =() =>{
             const tofireStoreUserCollection = {...filterForm, userId:userCredential.user.uid, status:"pending",role:"employee",firstName:"",lastName:"",phone:"",profileUrl:"",joinedAt: new Date().toISOString()};
 
             const collectionRef = collection(fireStoreDB,"Users");
-
             await addDoc(collectionRef,tofireStoreUserCollection);
+
+            const logsCollectionRef = collection(fireStoreDB,"logs");
+            await addDoc(logsCollectionRef, {action:'USER_CREATED',targetUserId:userCredential.user.uid,targetUsername:filterForm.username,timestamp:serverTimestamp()})
+
 
             await signOut(auth)
 

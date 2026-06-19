@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {UsersListContext} from '../../../../Contexts'
+import {UserContext, UsersListContext} from '../../../../Contexts'
 import QuickActionButton from '../QuickApprovalAction/QuickActionButton'
 import {quickEditUser} from '../../Services/adminService';
 
@@ -8,6 +8,8 @@ export default function AdminDashboard() {
   const {usersListLoading,usersList,setUsersListUpdated} = useContext(UsersListContext);
 
   const {updateStatus,isStatusUpdateSuccess} = quickEditUser();
+
+  const {userDetails} = useContext(UserContext)
 
     let analytics = {
     totalUsers:usersList?.length || 0,
@@ -21,46 +23,54 @@ export default function AdminDashboard() {
   const pendingUsers = usersList?.filter(user => user.status === 'pending');
 
   const cards = [
-    {
-      title:'Users',
-      content:analytics.totalUsers,
-      bgColor: 'bg-gradient-to-r from-purple-800 to-blue-800'
-    },
-      {
-      title:'Admin',
-      content:analytics.totalAdmin,
-      bgColor: 'bg-gradient-to-r from-blue-600 to-violet-600'
-    },
-      {
-      title:'Employees',
-      content:analytics.totalEmployees,
-      bgColor: 'bg-gradient-to-r from-violet-600 to-purple-400'
-    },
-      {
-      title:'Active Users',
-      content:analytics.totalActive,
-      bgColor: 'bg-gradient-to-r from-green-600 to-green-900'
-    },
-      {
-      title:'Pending Users',
-      content:analytics.totalPending,
-      bgColor: 'bg-gradient-to-r from-gray-600 to-gray-700'
-    },
-      {
-      title:'Suspended Users',
-      content:analytics.totalSuspended,
-      bgColor: 'bg-gradient-to-r from-pink-600 to-red-800'
-    }
-  ]
+  {
+    title: "Users",
+    content: analytics.totalUsers,
+    bgColor:
+      "bg-gradient-to-r from-purple-500 to-violet-600 dark:from-purple-600 dark:to-violet-800",
+  },
+  {
+    title: "Admin",
+    content: analytics.totalAdmin,
+    bgColor:
+      "bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-600 dark:to-cyan-700",
+  },
+  {
+    title: "Employees",
+    content: analytics.totalEmployees,
+    bgColor:
+      "bg-gradient-to-r from-orange-400 to-amber-500 dark:from-orange-500 dark:to-amber-700",
+  },
+  {
+    title: "Active Users",
+    content: analytics.totalActive,
+    bgColor:
+      "bg-gradient-to-r from-emerald-500 to-green-600 dark:from-emerald-600 dark:to-green-800",
+  },
+  {
+    title: "Pending Users",
+    content: analytics.totalPending,
+    bgColor:
+      "bg-gradient-to-r from-slate-400 to-slate-600 dark:from-slate-600 dark:to-slate-800",
+  },
+  {
+    title: "Suspended Users",
+    content: analytics.totalSuspended,
+    bgColor:
+      "bg-gradient-to-r from-rose-500 to-red-600 dark:from-rose-600 dark:to-red-800",
+  },
+];
 
   function handleQuickStatusAction(user){
   const statusToUpdate = 'active'
   const userToUpdate = {
     userDocID: user.id,
+    userId: user.userId,
     status: statusToUpdate,
     username:user.username,
+    previousStatus:'pending',
   }
-  updateStatus(userToUpdate)
+  updateStatus(userToUpdate,{loggedInUserRole:userDetails?.role,loggedInUserId:userDetails?.userId,loggedInUsername:userDetails?.username})
 }
 
 useEffect(()=>{
@@ -86,13 +96,13 @@ useEffect(()=>{
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
 
         {cards.map((card,index)=> (
-          <div className={`rounded-xl h-28 ${card.bgColor} flex flex-col items-start justify-between px-2 py-4`} key={index}>
+          <div className={`rounded-xl h-28 ${card.bgColor} flex flex-col items-start justify-between px-2 py-4 dark:text-white`} key={index}>
             <h1 className='text-xl font-bold'>{card.title}</h1>
             <h3 className='text-lg font-bold'>{card.content}</h3>
         </div>
         ))}        
       </div>
-      <div className='flex flex-col gap-2 bg-slate-50 p-4 rounded-xl lg:max-w-[500px] lg:mx-auto mt-5'>
+      <div className='flex flex-col gap-2 bg-slate-50 p-4 rounded-xl lg:max-w-[700px] lg:mx-auto lg:mt-5'>
         <h2 className='text-gray-600 font-bold text-xl'>Pending Approvals</h2>
         {pendingUsers && pendingUsers.length > 0 ? 
         pendingUsers.map((user) => (

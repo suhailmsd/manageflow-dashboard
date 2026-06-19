@@ -132,7 +132,7 @@ export default function AuthForm({buttonTitle,mode}) {
                     <label htmlFor="password" className="mb-1 text-gray-600">Password</label>
                     <div className='w-full relative'>
                         <input type={`${showPassword ? 'text' : 'password'}`} id="password"  placeholder="******"  className={`${inputStyle} ${errors.password ? 'border-red-500 border-2' : ''}`} value={form.password} onChange={handleInputChange} name='password' onBlur={handleBlur} />
-                        {showPassword ? <FaEye style={{position:'absolute',top:'50%',right:'10px', transform:'translateY(-50%)',cursor:'pointer'}} onClick={togglePasswordVisible}/> : <FaEyeSlash style={{position:'absolute',top:'50%',right:'10px', transform:'translateY(-50%)',cursor:'pointer'}} onClick={togglePasswordVisible}/>}
+                        {showPassword ? <FaEye style={{position:'absolute',top:'50%',right:'10px', transform:'translateY(-50%)',cursor:'pointer'}} onClick={togglePasswordVisible}/> : <FaEyeSlash className='absolute top-1/2 -translate-y-1/2 right-3 dark:text-slate-300' onClick={togglePasswordVisible}/>}
                     </div>
                     {isPasswordInvalid&& <div className='text-xs text-red-500 block mt-1'>Minimum 8-20 char with atleast a capital letter, special char, number</div>}
                     {errors.password && <div className='text-xs text-red-500 mt-1'>{errors.password}</div>}
