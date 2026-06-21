@@ -1,0 +1,111 @@
+import { useContext, useState } from "react";
+import { FirebaseContext, UserContext } from "../contexts";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  updateDoc,
+  where,
+  deleteDoc,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { getAuth, deleteUser } from "firebase/auth";
+import { useToast } from "../hooks";
+
+export const updateUserProfile = () => {
+  const { firebase } = useContext(FirebaseContext);
+  const { userDetails, setUserDetails } = useContext(UserContext);
+  const fireStoreDB = getFirestore(firebase);
+  const { handleToast } = useToast();
+
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateError, setUpdateError] = useState(null);
+
+  async function update(updateData) {
+    try {
+      setUpdateLoading(true);
+
+      const getCollectionReference = query(
+        collection(fireStoreDB, "Users"),
+        where("userId", "==", userDetails.userId),
+      );
+
+      const getDoc = await getDocs(getCollectionReference);
+
+      if (!getDoc.empty) {
+        const docReference = getDoc.docs[0].ref;
+
+        await updateDoc(docReference, updateData);
+
+        setUserDetails((prev) => ({
+          ...prev,
+          firstName: updateData.firstName,
+          lastName: updateData.lastName,
+          phone: updateData.phone,
+        }));
+      }
+      handleToast("success", "User updated successfully");
+    } catch (error) {
+      setUpdateError(error.message);
+    } finally {
+      setUpdateLoading(false);
+    }
+  }
+
+  return {
+    updateLoading,
+    updateError,
+    update,
+  };
+};
+
+export const deleteUserProfile = () => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  const { firebase } = useContext(FirebaseContext);
+  const firestoreDb = getFirestore(firebase);
+
+  const [isDeleteUserSuccess, setIsDeleteUserSuccess] = useState(false);
+  const [deleteUserError, setDeleteUserError] = useState(null);
+  const [isLoadingDeleteRequest, setIsLoadingDeleteRequest] = useState(false);
+
+  async function deleteCurrentUser(deleteUserId, deleteUsername) {
+    try {
+      setIsLoadingDeleteRequest(true);
+
+      const userSearchQuery = query(
+        collection(firestoreDb, "Users"),
+        where("userId", "==", deleteUserId),
+      );
+
+      const snapshot = await getDocs(userSearchQuery);
+      const logsCollectionRef = collection(firestoreDb, "logs");
+
+      if (!snapshot.empty) {
+        await deleteDoc(snapshot.docs[0].ref);
+        await deleteUser(currentUser);
+        await addDoc(logsCollectionRef, {
+          action: "USER_DELETED",
+          targetUserId: deleteUserId,
+          targetUsername: deleteUsername,
+          timestamp: serverTimestamp(),
+        });
+      }
+
+      setIsDeleteUserSuccess(true);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    } catch (error) {
+      setDeleteUserError(error.message);
+    } finally {
+      setIsLoadingDeleteRequest(false);
+    }
+  }
+
+  return {
+    deleteCurrentUser,
+    isLoadingDeleteRequest,
+    isDeleteUserSuccess,
+  };
+};
