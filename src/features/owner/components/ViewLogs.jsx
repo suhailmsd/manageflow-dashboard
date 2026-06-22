@@ -1,7 +1,7 @@
-import { getLogs } from "../services/ownerService";
+import { useLogs } from "../services/ownerService";
 
 export default function ViewLogs() {
-  const { getLogsData, logsLoading } = getLogs();
+  const { getLogsData, logsLoading } = useLogs();
 
   return (
     <>
@@ -41,9 +41,9 @@ export default function ViewLogs() {
                       <td>{`${log.performedByUsername || ""} ${log.performedBy ? `(${log.performedBy})` : ""}`}</td>
                     </tr>
                   ))
-                ) : (
-                  "no users data"
-                )}
+                ) :  <tr>
+    <td colSpan="4">No logs found</td>
+  </tr>}
               </tbody>
             </table>
           </div>

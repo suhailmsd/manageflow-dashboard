@@ -8,7 +8,7 @@ import {
   query,
 } from "firebase/firestore";
 
-export const getLogs = () => {
+export const useLogs = () => {
   const { firebase } = useContext(FirebaseContext);
   const firestoreDb = getFirestore(firebase);
 
